@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body style="margin: 0;padding: 0;">
+<div>
+  <img src="" alt="" style="width: 100%;" id="img">
+</div>
+<script>
+  var url = window.location.href;
+  var result = url.match(/\?.*url=([^&]*).*/);
+  var imgUrl = decodeURIComponent(result[1]);
+  document.getElementById('img').src = imgUrl;
+</script>
+</body>
+</html>

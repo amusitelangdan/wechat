@@ -1,0 +1,77 @@
+{
+  "button": [
+    {
+      "type": "click",
+      "name": "会员中心",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "宝宝动态",
+          "url": "https://wechat-test.daishumm.com/#/parent/index"
+        },
+        {
+          "type": "view",
+          "name": "服务中心",
+          "url": "https://wechat-test.daishumm.com/#/service/index"
+        },
+        {
+          "type": "view",
+          "name": "老师入口",
+          "url": "https://wechat-test.daishumm.com/#/teacher/index"
+        }
+      ]
+    },
+    {
+      "type": "click",
+      "name": "服务理念",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "课程介绍",
+          "url": "https://v.xiumi.us/board/v5/3FxZD/106379774"
+        },
+        {
+          "type": "view",
+          "name": "周末活动",
+          "url": "https://c.xiumi.us/board/v5/3FxZD/106430707"
+        },
+        {
+          "type": "view",
+          "name": "预约咨询",
+          "url": "https://wechat-test.daishumm.com/#/reserve/inputInfo"
+        }
+      ]
+    },
+    {
+      "type": "click",
+      "name": "关于袋鼠",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "介绍视频",
+          "url": "https://v.qq.com/x/page/q0330f5q90k.html"
+        },
+        {
+          "type": "view",
+          "name": "核心团队",
+          "url": "https://v.xiumi.us/board/v5/3FxZD/106383352"
+        },
+        {
+          "type": "view",
+          "name": "园区地址",
+          "url": "https://wechat-test.daishumm.com/#/address"
+        },
+        {
+          "type": "view",
+          "name": "商务合作",
+          "url": "https://www.baidu.com"
+        },
+        {
+          "type": "view",
+          "name": "招贤纳士",
+          "url": "https://www.baidu.com"
+        }
+      ]
+    }
+  ]
+}
