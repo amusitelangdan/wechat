@@ -13,9 +13,9 @@
           </el-col>
         </el-col>
         <el-col :span="8">
-          <div style="width: 50px;height: 50px; display: block; border-radius: 50%; margin: auto; overflow: hidden; position: relative">
-            <img v-if="tokenTeacherInfo.photo" :src="tokenTeacherInfo.photo" style="height: 100%; position: absolute; left: 50%; transform: translateX(-50%)">
-            <img v-else src="../../assets/img/icon/defaultAvatar/teacher_default_avator.png" style="height: 100%; position: absolute; left: 50%; transform: translateX(-50%)">
+          <div v-if="tokenTeacherInfo.photo"  style="width: 50px;height: 50px; display: block; border-radius: 50%; margin: auto; overflow: hidden; position: relative;background-repeat: no-repeat;background-size: cover" :style="{backgroundImage: `url(${tokenTeacherInfo.photo})`}">
+          </div>
+          <div v-else style="width: 50px;height: 50px; display: block; border-radius: 50%; margin: auto; overflow: hidden; position: relative;background-repeat: no-repeat;background-size: cover;" :style="{backgroundImage: `url(${require('../../assets/img/icon/defaultAvatar/teacher_default_avator.png')})`}">
           </div>
           <div style="text-align: center;margin-top:.8rem">{{tokenTeacherInfo.name}}</div>
         </el-col>
@@ -289,7 +289,6 @@
       init() {
         // console.log(this.tokenTeacherInfo);
         this.getTokenTeacherInfo().then((resTeacher) => {
-          console.log(resTeacher);
           if (resTeacher.obj) {
             // 确定是职员才请求班级列表
             this.getTokenClassInfoList().then((res) => {

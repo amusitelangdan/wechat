@@ -107,6 +107,7 @@ const store = new Vuex.Store({
           state.uploading = false;
           const url = result.res.requestUrls[0].slice(0, result.res.requestUrls[0].indexOf('?') > 0 ? result.res.requestUrls[0].indexOf('?') : (result.res.requestUrls[0].length));
           resolve(url);
+          console.log(url);
         }).catch((err) => {
           state.uploading = false;
           Toast('上传图片失败');

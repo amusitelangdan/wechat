@@ -45,6 +45,7 @@
     },
     methods: {
       jump() {
+        console.log(this.selectedChildId);
         this.$router.push({
           path: '/day/structure/report',
           query: {

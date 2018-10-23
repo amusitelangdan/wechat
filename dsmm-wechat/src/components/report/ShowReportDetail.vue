@@ -27,13 +27,13 @@
       <div class="card-cell" style="padding-bottom: 0;padding-top: 0">
         <!--报告备注-->
         <div class="card" v-if="report.memo" style="padding-top: .5rem">
-          <div  style="padding: .3rem 0 0;word-wrap:break-word;" v-for="(item, index) in report.memo.split('<br>')" :key="index">{{item}}</div>
+          <div  style="padding: .3rem 0 0;word-wrap:break-word;" v-for="(item, index) in report.memo.split('\n')" :key="index">{{item}}</div>
         </div>
         <!--报告照片，视频-->
         <div>
           <div v-if="report.photos && JSON.parse(report.photos).length !== 0" class="card" style="display: flex;flex-wrap: wrap;margin: .5rem 0">
             <el-col :span="8" v-for="(item, index) in JSON.parse(report.photos)" :key="index">
-              <div style="width: 7.5rem;height: 7.5rem;margin: .3rem auto;overflow:hidden;background-size: cover;background-repeat: no-repeat" :style="{backgroundImage: `url(${item})`}" @click="preview(item)"></div>
+              <div :style="{background: `url(${item}) no-repeat center`, width: '7.5rem', height: '7.5rem', margin: '.3rem auto', backgroundSize: 'cover'}" @click="preview(item)"></div>
             </el-col>
           </div>
           <div v-if="report.video" class="card" style="display: flex;flex-wrap: wrap;margin-top: 1rem">

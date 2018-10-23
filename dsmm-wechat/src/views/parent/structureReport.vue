@@ -6,10 +6,10 @@
     <img v-else-if="type.toString() === '3'" :src="require('../../assets/img/icon/sendReport/backgroundImag_lunch.png')" alt="" class="background-img">
     <img v-else-if="type.toString() === '4'" :src="require('../../assets/img/icon/sendReport/backgroundImag_teach.png')" alt="" class="background-img">
     <div class="box_shadow" style="background:#ffffff;margin: 10rem 1rem 0;">
-      <div class="card" style="height: 9rem;position: relative;">
-        <div class="layout-shadow" style="overflow:hidden;">
-          <img v-if="message.photo" :src="message.photo" alt="" style="width: 100%; vertical-align: middle; top: 50%; position: absolute; transform: translateY(-50%)">
-          <img v-else-if="!message.photo" :src="require('../../assets/img/icon/defaultAvatar/defaultAvatar.png')" style="width: 100%; vertical-align: middle; top: 50%; position: absolute; transform: translateY(-50%)">
+      <div class="card" style="height: 9rem;position: relative;z-index: 2000;">
+        <div class="layout-shadow" style="overflow:hidden;z-index: 2500;">
+          <img v-if="message.photo" :src="message.photo" alt="" style="width: 5rem;height: 5rem;">
+          <img v-if="!message.photo" :src="require('../../assets/img/icon/defaultAvatar/defaultAvatar.png')" style="width: 5rem;height: 5rem;">
         </div>
         <div style="overflow:hidden;">
           <div style="margin-top: 3.5rem;height:4.5rem;">
@@ -148,7 +148,13 @@
           this.desc = '[离园情况]离园情况，安全把控';
           this.imgUrl = 'https://dsmm-oss.oss-cn-hangzhou.aliyuncs.com/share/%E7%A6%BB%E5%9B%AD.png';
         }
-        const link = `https://wechat.daishumm.com/static/share.html?url=${this.imageUrl}`;
+        let link = '';
+        if (this.message.photo) {
+          console.log(encodeURIComponent(this.message.photo));
+          link = `https://wechat.daishumm.com/static/share.html?url=${this.imageUrl}&imgUrl=${encodeURIComponent(this.message.photo)}`;
+        } else {
+          link = `https://wechat.daishumm.com/static/share.html?url=${this.imageUrl}`;
+        }
         wx.ready(() => {
           // 分享朋友圈
           wx.onMenuShareTimeline({
@@ -182,8 +188,8 @@
         setTimeout(() => {
           html2canvas(document.body, {
             allowTaint: false, // 允许污染
-            taintTest: true, // 在渲染前测试图片(没整明白有啥用)
             useCORS: false, // 使用跨域(当allowTaint为true时这段代码没什么用,下面解释)
+            logging: false,
           }).then((canvas) => {
             if (!HTMLCanvasElement.prototype.toBlob) {
               Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
@@ -203,7 +209,7 @@
               reader.readAsArrayBuffer(blob);
               reader.onload = (event) => {
                 this.uploadPhotoCanvas({
-                  fileName: `html2canvas/${new Date().getTime()}.jpeg`,
+                  fileName: `html2canvas/${new Date().getTime()}.png`,
                   data: event.target.result,
                 }).then((url) => {
                   this.imageUrl = encodeURIComponent(url);
@@ -215,6 +221,19 @@
           });
         }, 1000);
       },
+      // convertImgToBase64(img) {
+      //   const canvas = document.createElement('canvas');
+      //   const ctx = canvas.getContext('2d');
+      //   canvas.width = img.width;
+      //   canvas.height = img.height;
+      //   ctx.drawImage(img, 0, 0, img.width, img.height);
+      //   const ext = img.src.substring(img.src.lastIndexOf('ex.') + 1).toLowerCase();
+      //   const dataURL = canvas.toDataURL(`image/${ext}`);
+      //   // canvas.call(this, dataURL);
+      //   // canvas = null;
+      //   console.log(dataURL);
+      //   return dataURL;
+      // },
     },
     mounted() {
       this.beforeInline();
@@ -229,6 +248,13 @@
         childId: this.$route.query.childId,
       }).then((res) => {
         this.message = res.obj;
+        // console.log(this.message.photo);
+        // const tempImage = new Image();
+        // tempImage.src = this.message.photo;
+        // tempImage.setAttribute('crossOrigin', 'Anonymous');
+        // tempImage.onload = () => {
+        //   this.convertImgToBase64(tempImage);
+        // };
       });
       if (this.type.toString() === '3') {
         this.getWeekLunch({
@@ -241,7 +267,7 @@
           const tuesdayFoods = JSON.parse(this.weekLunch.tuesDay).foods;
           const fridayFoods = JSON.parse(this.weekLunch.friday).foods;
           mondayFoods.forEach((item) => {
-            if (item.typeName === '主食') {
+            if (item.typeName === '主菜') {
               this.mondayFood.mondayFoodStaple.push(item);
             } else if (item.typeName === '辅菜') {
               this.mondayFood.mondayFoodSupplement.push(item);
@@ -250,7 +276,7 @@
             }
           });
           thursdayFoods.forEach((item) => {
-            if (item.typeName === '主食') {
+            if (item.typeName === '主菜') {
               this.thursdayFood.thursdayFoodStaple.push(item);
             } else if (item.typeName === '辅菜') {
               this.thursdayFood.thursdayFoodSupplement.push(item);
@@ -259,7 +285,7 @@
             }
           });
           wednesdayFoods.forEach((item) => {
-            if (item.typeName === '主食') {
+            if (item.typeName === '主菜') {
               this.wednesdayFood.wednesdayFoodStaple.push(item);
             } else if (item.typeName === '辅菜') {
               this.wednesdayFood.wednesdayFoodSupplement.push(item);
@@ -268,7 +294,7 @@
             }
           });
           tuesdayFoods.forEach((item) => {
-            if (item.typeName === '主食') {
+            if (item.typeName === '主菜') {
               this.tuesdayFood.tuesdayFoodStaple.push(item);
             } else if (item.typeName === '辅菜') {
               this.tuesdayFood.tuesdayFoodSupplement.push(item);
@@ -277,7 +303,7 @@
             }
           });
           fridayFoods.forEach((item) => {
-            if (item.typeName === '主食') {
+            if (item.typeName === '主菜') {
               this.fridayFood.fridayFoodStaple.push(item);
             } else if (item.typeName === '辅菜') {
               this.fridayFood.fridayFoodSupplement.push(item);

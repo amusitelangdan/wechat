@@ -174,6 +174,7 @@
           path: '/dayInfo',
           query: {
             reportId: item.id,
+            childId: item.child ? item.child.id : '',
           },
         });
       },

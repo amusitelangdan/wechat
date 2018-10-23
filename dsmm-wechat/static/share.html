@@ -2,17 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
     <title></title>
 </head>
 <body style="margin: 0;padding: 0;">
-<div>
+<div style="position: relative;">
+  <div class="head" style="width: 75px;height: 75px;border-radius: 75px;overflow: hidden;position: absolute;top: 10%;left: 50%;transform: translateX(-50%);box-shadow: 0 .3rem .5rem #e0dfdf;">
+    <img src="" alt="" id="head1" style="width:75px;height: 75px;">
+  </div>
   <img src="" alt="" style="width: 100%;" id="img">
 </div>
 <script>
   var url = window.location.href;
   var result = url.match(/\?.*url=([^&]*).*/);
+  var head = url.match(/\?.*imgUrl=([^&]*).*/);
   var imgUrl = decodeURIComponent(result[1]);
+  var headUrl = decodeURIComponent(head[1]);
   document.getElementById('img').src = imgUrl;
+  document.getElementById('head1').src = headUrl;
 </script>
 </body>
 </html>

@@ -2,7 +2,9 @@
   <div>
     <div style="float:left;width: 8.1rem;height: 8.1rem;position: relative;">
       <img src="../../assets/img/icon/global/delete_photo.png" alt="" class="imgDelete" style="width: 26px;height: 26px;  position: absolute; right: .3rem; top: -10px;z-index: 123;" @click="deletePhoto">
-      <div style="width: 100px;height: 100px;overflow:hidden;background-size: cover;background-repeat: no-repeat" :style="{backgroundImage: `url(${image})`}" @click="preview"></div>
+      <div style="width: 100px;height: 100px;">
+        <div :style="{background: `url(${image}) no-repeat center`, width: '100px', height: '100px', backgroundSize: 'cover'}" @click="preview"></div>
+      </div>
     </div>
     <!--是否删除图片模态框-->
     <mt-popup
@@ -12,7 +14,7 @@
       <div class="card" style="border-radius: .25rem">
         <div class="card-cell" style="text-align: center;">是否删除这张图片?</div>
         <div style="margin: 1rem auto;height: 7rem;overflow:hidden;width: 7rem">
-          <div style="height: 100px;overflow:hidden;background-size: cover;background-repeat: no-repeat;margin: 0 auto;" :style="{backgroundImage: `url(${image})`}"></div>
+          <div :style="{background: `url(${image}) no-repeat center`, width: '100px', height: '100px', backgroundSize: 'cover'}"></div>
         </div>
         <div class="button-group">
           <div class="button-return_submit" @click="deleteCancel">返回</div>

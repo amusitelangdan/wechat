@@ -49,7 +49,7 @@
         </div>
         <div class="button-group">
           <div class="button-return_submit" @click="error">返回修改</div>
-          <div class="button-sure_submit" @click="success">确认发送</div>
+          <div class="button-sure_submit" @click="success" v-loading="loading">确认发送</div>
         </div>
       </div>
     </mt-popup>
@@ -95,6 +95,7 @@
     computed: {
       ...mapState({
         teacherSelectedChildInfo: state => state.teacher.teacherSelectedChildInfo,
+        loading: state => state.loading,
       }),
       playerOptions() {
         return JSON.parse(JSON.stringify(this.$store.state.playerOptions));
@@ -146,7 +147,7 @@
         this.postReport({
           type: parseInt(this.type, 10),
           photos: JSON.stringify(this.imageUrlList),
-          memo: this.memo.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>').replace(/\s/g, ' '),
+          memo: this.memo.replace(/\r\n/g, '\n').replace(/\n/g, '\n').replace(/\s/g, '\n'),
           videoUrl: this.videoUrl,
           time: this.time,
         });

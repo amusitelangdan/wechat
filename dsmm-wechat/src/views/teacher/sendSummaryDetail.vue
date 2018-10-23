@@ -84,7 +84,7 @@
         </div>
         <div class="button-group">
           <div class="button-return_submit" @click="error" style="line-height: 100%">返回修改</div>
-          <div class="button-sure_submit" @click="success" style="line-height: 100%">确认发送</div>
+          <div class="button-sure_submit" @click="success" v-loading="loading">确认发送</div>
         </div>
       </div>
     </mt-popup>
@@ -152,6 +152,7 @@
       ...mapState({
         teacherSelectedChildInfo: state => state.teacher.teacherSelectedChildInfo,
         daySummaryInfoList: state => state.teacher.daySummaryInfoList,
+        loading: state => state.loading,
       }),
     },
     methods: {
@@ -185,7 +186,7 @@
         }
       },
       success() {
-        this.popupSubmit = false;
+        // this.popupSubmit = false;
         const data = JSON.stringify({
           bodyTemperature: this.daySummaryInfoList.items.bodyTemperature,  // 体温
           feeling: this.daySummaryInfoList.items.feeling,   // 情绪
@@ -199,15 +200,16 @@
         this.postReport({
           type: 5,
           items: data,
-          memo: this.daySummaryInfoList.memo.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>').replace(/\s/g, ' '), // 每日寄语
+          memo: this.daySummaryInfoList.memo.replace(/\r\n/g, '\n').replace(/\n/g, '\n').replace(/\s/g, '\n'), // 每日寄语
         });
+        localStorage.setItem('summaryDetail', data);
       },
       error() {
         this.popupSubmit = false;
       },
       confirmSelect() {
         this.daySummaryInfoList.items.relationPn = this.$refs.picker.getSlotValue(0).name;
-        this.relationValue = this.$refs.picker.getSlotValue(0).value;
+        this.daySummaryInfoList.items.relationValue = this.$refs.picker.getSlotValue(0).value;
         this.parentRelation = false;
       },
       cancelSelect() {
@@ -216,9 +218,22 @@
       relation() {
         this.parentRelation = true;
       },
+      init() {
+        if (localStorage.getItem('summaryDetail')) {
+          const summaryData = JSON.parse(localStorage.getItem('summaryDetail'));
+          console.log(summaryData);
+          this.daySummaryInfoList.items.bodyTemperature = summaryData.bodyTemperature;
+          this.daySummaryInfoList.items.feeling = summaryData.feeling;
+          this.daySummaryInfoList.items.drinkWater = summaryData.drinkWater;
+          this.daySummaryInfoList.items.relationPn = summaryData.relationPn;
+          this.daySummaryInfoList.items.relationValue = summaryData.relation;
+          this.daySummaryInfoList.items.shit = summaryData.shit;
+        }
+      },
     },
     //    通过路由将值传了进来并进行渲染
     created() {
+      this.init();
       const d = new Date();
       this.moveTime = moment(d).format('a h:mm');
     },

@@ -16,6 +16,7 @@
     data() {
       return {
         sheetVisible: false,
+        flag: true,
       };
     },
     computed: {
@@ -28,10 +29,11 @@
         uploadPhoto: 'uploadPhoto',
       }),
       addPhoto(event) {
-        console.log(event.target.files);
-        for (let i = 0; i < 9; i += 1) {
-          const uploadFileName = `photos/${(Date.now()).toString()}`;
+        for (let i = 0; i <= 9; i += 1) {
           if (event.target.files[i] !== undefined) {
+            const fixSize = event.target.files[i].size;
+            const uploadFileName = `photos/${(Date.now()).toString()}/${fixSize}`;
+            // console.log(event.target.files[i]);
             this.uploadPhoto({ fileName: uploadFileName, fileRaw: event.target.files[i] }).then((url) => {
               let httpsUrl = '';
               // 判断:返的如果是http则改为https
@@ -40,7 +42,7 @@
               } else {
                 httpsUrl = url;
               }
-              this.$emit('uploaded', httpsUrl);
+              return this.$emit('uploaded', httpsUrl);
             });
           }
         }

@@ -62,7 +62,7 @@
                     style="-webkit-appearance: none;appearance: none;width: 100%;outline: none;border-radius: 5px;padding: .8rem .6rem;-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;resize:none"
                     v-model="dayLunchInfoList.memo"  wrap="hard"></textarea>
     </div>
-    <div class="button-block_primary" @click="sureSubmit">
+    <div  class="button-block_primary" @click="sureSubmit">
       提交
     </div>
     <mt-popup
@@ -98,7 +98,7 @@
         </div>
         <div class="button-group">
           <div class="button-return_submit" @click="error">返回修改</div>
-          <div class="button-sure_submit" @click="success">确认发送</div>
+          <div class="button-sure_submit" @click="success" v-loading="loading">确认发送</div>
         </div>
       </div>
     </mt-popup>
@@ -116,6 +116,8 @@
     name: 'LunchList',
     data() {
       return {
+        // 是否提交成功
+        sure: true,
         value7: 0,
         dish: '',
         mainFood: '',
@@ -140,6 +142,7 @@
         todaySchedule: state => state.teacher.todaySchedule,
         teacherSelectedChildInfo: state => state.teacher.teacherSelectedChildInfo,
         dayLunchInfoList: state => state.teacher.dayLunchInfoList,
+        loading: state => state.loading,
       }),
     },
     components: {
@@ -227,7 +230,7 @@
           type: 3,
           photos: JSON.stringify(this.dayLunchInfoList.photos),
           items: data,
-          memo: this.dayLunchInfoList.memo.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>').replace(/\s/g, ' '),
+          memo: this.dayLunchInfoList.memo.replace(/\r\n/g, '\n').replace(/\n/g, '\n').replace(/\s/g, '\n'),
         };
         this.postReport(payload);
       },

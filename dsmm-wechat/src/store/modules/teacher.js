@@ -3,6 +3,7 @@ import { Toast } from 'mint-ui';
 import router from '../../router/index';
 
 const teacher = {
+  loading: false,
   namespaced: true,
   state: {
     dayCheckInfoList: {
@@ -56,7 +57,6 @@ const teacher = {
     getTokenTeacherInfo({ state }) {
       return new Promise((resolve, reject) => {
         api.getTokenTeacherInfo().then((res) => {
-          console.log(res);
           state.tokenTeacherInfo = res.obj;
           resolve(res);
         }).catch((err) => {

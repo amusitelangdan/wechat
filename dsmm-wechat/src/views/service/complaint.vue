@@ -18,7 +18,7 @@
         <UploadPhotos  v-if="imageUrlList.length <= 8"   v-on:uploaded="uploaded"></UploadPhotos>
       </div>
       <div class="card-cell" style="padding: 0;">
-        <div v-if="phone" class="input_line" style="line-height: 100%;border: 0;">{{phone}}</div>
+        <div v-if="editing.phone" class="input_line" style="line-height: 100%;border: 0;">{{editing.phone}}</div>
         <input v-else class="input_line" type="text" style="border: 0" placeholder="请输入您的手机联系方式" v-model="editing.phone">
       </div>
       <div class="card-cell color-info" style="font-size: 12px; line-height: 1.5rem">
@@ -142,8 +142,8 @@
         this.popupVisible = true;
       },
       submitSure() {
-        if (this.phone !== '' && this.editing.type !== '') {
-          if (/^(13|15|18|17)\d{9}$/i.test(this.phone)) {
+        if (this.editing.phone !== '' && this.editing.type !== '') {
+          if (/^(13|15|18|17)\d{9}$/i.test(this.editing.phone)) {
             if (this.editing.content !== '') {
               if (this.$route.query.childId) {
                 this.postFeedback({
@@ -195,7 +195,9 @@
       },
     },
     created() {
-      this.phone = localStorage.getItem('phone');
+      if (localStorage.getItem('phone')) {
+        this.editing.phone = localStorage.getItem('phone');
+      }
       if (this.$route.query.childId) {
         this.editing.childId = this.$route.query.childId;
         this.childList.forEach((child) => {

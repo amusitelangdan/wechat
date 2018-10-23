@@ -19,7 +19,7 @@
         </div>
       </div>
     </div>
-    <div class="button-block_primary"  @click="sureSubmit">
+    <div  class="button-block_primary" @click="sureSubmit">
       提交
     </div>
     <mt-popup
@@ -76,7 +76,7 @@
           </div>
           <div class="button-group">
             <div class="button-return_submit" @click="error">返回修改</div>
-            <div class="button-sure_submit" @click="success">确认发送</div>
+            <div class="button-sure_submit" @click="success" v-loading="loading">确认发送</div>
           </div>
         </div>
       </div>
@@ -111,6 +111,7 @@
       ...mapState({
         teacherSelectedChildInfo: state => state.teacher.teacherSelectedChildInfo,
         dayCheckInfoList: state => state.teacher.dayCheckInfoList,
+        loading: state => state.loading,
       }),
     },
     methods: {
@@ -132,11 +133,13 @@
           nail: this.dayCheckInfoList.items.nail, // 指甲情况
           time: date, // 发送日期
         });
+        localStorage.setItem('checkDetail', this.data);
         this.postReport({
           type: 1,
           items: this.data,
           memo: this.dayCheckInfoList.memo.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>').replace(/\s/g, ' '),
         });
+        console.log(this.data);
       },
 //        利用$on $emit将温度读取到，将情绪状态获取到
       listenToMyBoy(someData) {
@@ -171,6 +174,15 @@
         this.dayTime = moment().format('HH:mm');
       },
       init() {
+        if (localStorage.getItem('checkDetail')) {
+          const checkData = JSON.parse(localStorage.getItem('checkDetail'));
+          console.log(checkData);
+          this.dayCheckInfoList.items.bodyTemperature = checkData.bodyTemperature;
+          this.dayCheckInfoList.items.headAndMouth = checkData.headAndMouth;
+          this.dayCheckInfoList.items.bodyCondition = checkData.bodyCondition;
+          this.dayCheckInfoList.items.feeling = checkData.feeling;
+          this.dayCheckInfoList.items.nail = checkData.nail;
+        }
       },
     },
     created() {

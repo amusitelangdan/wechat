@@ -16,7 +16,7 @@
           <div v-if="daySleepInfoList.items.modeValue !== '拒绝睡觉'" style="flex: 1;display: flex" @click="timeSelect" class="new-card-cell">
             <div style="flex: 1;">&nbsp;&nbsp;&nbsp;&nbsp;入睡时间:</div>
             <div style="flex: 1;">
-              <div style="float:left;">{{daySleepInfoList.items.napTime ? daySleepInfoList.items.napTime : '11:30'}}</div>
+              <div style="float:left;">{{pickerValue}}</div>
               <img src="../../assets/img/icon/global/arrow-right.png" alt="" style="width: .5rem;height: 1rem;margin-left: 2rem;display:block;margin-top: .2rem;float:left;">
             </div>
           </div>
@@ -34,7 +34,7 @@
         :closeOnClickModal=false
         ref="picker"
         type="time"
-        v-model="daySleepInfoList.items.napTime"
+        v-model="pickerValue"
         :startHour=10
         :endHour=13
         @confirm="successConfirm" @touchmove.prevent>
@@ -63,7 +63,7 @@
           </textarea>
         </div>
     </div>
-    <div class="button-block_primary" @click="sureSubmit">
+    <div  class="button-block_primary" @click="sureSubmit">
       提交
     </div>
       <mt-popup
@@ -95,7 +95,7 @@
           </div>
           <div class="button-group">
             <div class="button-return_submit" @click="error">返回修改</div>
-            <div class="button-sure_submit" @click="success">确认发送</div>
+            <div class="button-sure_submit" @click="success" v-loading="loading">确认发送</div>
           </div>
         </div>
       </mt-popup>
@@ -113,6 +113,7 @@
     name: 'LunchList',
     data() {
       return {
+        // 是否提交成功
 //          入睡时长
         durationVisible: false,
 //        入睡方式
@@ -162,10 +163,21 @@
       ...mapState({
         teacherSelectedChildInfo: state => state.teacher.teacherSelectedChildInfo,
         daySleepInfoList: state => state.teacher.daySleepInfoList,
+        loading: state => state.loading,
       }),
     },
 //    通过路由将值传了进来并进行渲染
     created() {
+      if (localStorage.getItem('sleepDetail')) {
+        const sleepData = JSON.parse(localStorage.getItem('sleepDetail'));
+        this.daySleepInfoList.items.napTime = JSON.parse(sleepData.items).napTime;
+        this.daySleepInfoList.items.modeValue = JSON.parse(sleepData.items).modeValue;
+        this.daySleepInfoList.items.roomTemperature = JSON.parse(sleepData.items).roomTemperature;
+        this.daySleepInfoList.photos = JSON.parse(sleepData.photos);
+      }
+      if (this.daySleepInfoList.items.napTime !== '----' && this.daySleepInfoList.items.napTime !== undefined) {
+        this.pickerValue = this.daySleepInfoList.items.napTime;
+      }
     },
     methods: {
       ...mapActions({
@@ -175,19 +187,31 @@
         this.popupSleep = false;
       },
       success() {
+        console.log('111');
         this.popupSleep = false;
-        const data = {
-          napTime: this.daySleepInfoList.items.napTime ? this.daySleepInfoList.items.napTime : '11:30',  // 入睡时间
-          modeValue: this.daySleepInfoList.items.modeValue ? this.daySleepInfoList.items.modeValue : '独立入睡', // 入睡方式
-          roomTemperature: this.daySleepInfoList.items.roomTemperature, // 室内温度
-          sleepInfo: this.daySleepInfoList.items.sleepInfo, // 睡眠情况
-        };
+        let data = {};
+        if (this.daySleepInfoList.items.modeValue !== '拒绝睡觉') {
+          data = {
+            napTime: this.pickerValue,  // 入睡时间
+            modeValue: this.daySleepInfoList.items.modeValue ? this.daySleepInfoList.items.modeValue : '独立入睡', // 入睡方式
+            roomTemperature: this.daySleepInfoList.items.roomTemperature, // 室内温度
+            sleepInfo: this.daySleepInfoList.items.sleepInfo, // 睡眠情况
+          };
+        } else {
+          data = {
+            napTime: '----',  // 入睡时间
+            modeValue: this.daySleepInfoList.items.modeValue ? this.daySleepInfoList.items.modeValue : '独立入睡', // 入睡方式
+            roomTemperature: this.daySleepInfoList.items.roomTemperature, // 室内温度
+            sleepInfo: this.daySleepInfoList.items.sleepInfo, // 睡眠情况
+          };
+        }
         const payload = {
           type: 2,
           photos: JSON.stringify(this.daySleepInfoList.photos),
           items: JSON.stringify(data),
-          memo: this.daySleepInfoList.memo.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>').replace(/\s/g, ' '),
+          memo: this.daySleepInfoList.memo.replace(/\r\n/g, '\n').replace(/\n/g, '\n').replace(/\s/g, '\n'),
         };
+        localStorage.setItem('sleepDetail', JSON.stringify(payload));
         this.postReport(payload);
       },
       timeSelect() {
@@ -198,11 +222,8 @@
         this.popupVisible = true;
       },
       successConfirm(data) {
-        if (this.daySleepInfoList.items.modeValue === '拒绝睡觉') {
-          this.daySleepInfoList.items.napTime = '----';
-        } else if (this.daySleepInfoList.items.modeValue !== '拒绝睡觉') {
-          this.daySleepInfoList.items.napTime = data;
-        }
+        this.pickerValue = data;
+        this.daySleepInfoList.items.napTime = data;
       },
       durationConfirm() {
         this.daySleepInfoList.items.napTime = this.$refs.pickeres.getSlotValue(0);
@@ -226,6 +247,7 @@
       },
       //      提交
       sureSubmit() {
+        console.log(this.daySleepInfoList.memo.replace(/\r\n/g, '\n').replace(/\n/g, '\n').replace(/\s/g, '\n'));
         if (this.daySleepInfoList.items.modeValue === '拒绝睡觉') {
           this.daySleepInfoList.items.napTime = '----';
         }

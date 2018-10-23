@@ -79,7 +79,7 @@
         </div>
         <div class="button-group">
           <div class="button-return_submit" @click="error">返回修改</div>
-          <div class="button-sure_submit" @click="success">确认发送</div>
+          <div class="button-sure_submit" @click="success" v-loading="loading">确认发送</div>
         </div>
       </div>
     </mt-popup>
@@ -119,6 +119,7 @@
       ...mapState({
         todaySchedule: state => state.teacher.todaySchedule,
         lessonList: state => state.lessonList,
+        loading: state => state.loading,
       }),
       slotsTeach() {
         return [{
@@ -160,7 +161,7 @@
         this.popupSleep = false;
       },
       success() {
-        this.popupSleep = false;
+        // this.popupSleep = false;
         const data = JSON.stringify({
           theme: this.teachName,
           ability: this.ability,
@@ -174,7 +175,7 @@
           type: 4,
           photos: JSON.stringify(this.imageUrlList),
           items: data,
-          memo: this.memo.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>').replace(/\s/g, ' '),
+          memo: this.memo.replace(/\r\n/g, '\n').replace(/\n/g, '\n').replace(/\s/g, '\n'),
         });
       },
       // 图片上传
