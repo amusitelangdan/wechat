@@ -67,9 +67,13 @@ const teacher = {
     getTokenClassInfoList({ state }) {
       return new Promise((resolve, reject) => {
         api.getTokenClassInfoList().then((res) => {
-          state.tokenClassInfoList = res.obj;
-          if (state.teacherSelectedClassId === '') {
-            state.teacherSelectedClassId = res.obj[0].id;
+          if (res.obj.length !== 0) {
+            state.tokenClassInfoList = res.obj;
+            if (state.teacherSelectedClassId === '') {
+              state.teacherSelectedClassId = res.obj[0].id;
+            }
+          } else {
+            router.replace('/teacher/noClass');
           }
           resolve(res);
         }).catch((err) => {
