@@ -19,6 +19,8 @@
       },
     },
     created() {
+      localStorage.removeItem('w-token');
+      localStorage.removeItem('phone');
     },
   };
 </script>

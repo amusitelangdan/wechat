@@ -179,8 +179,10 @@
           } else {
             this.$toast('请输入正确手机号码');
           }
-        } else {
-          this.$toast('请输入手机号码或者反馈类型，方便客服联系');
+        } else if (this.editing.type === '') {
+          this.$toast('请选择建议类型，方便客服联系');
+        } else if (this.editing.phone === '') {
+          this.$toast('请输入手机号，方便客服联系您');
         }
       },
       confirmSelect() {

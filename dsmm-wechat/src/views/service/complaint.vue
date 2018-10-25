@@ -181,8 +181,10 @@
           } else {
             this.$toast('请输入正确手机号');
           }
-        } else {
-          this.$toast('请输入手机号码或者反馈类型，方便客服联系');
+        } else if (this.editing.type === '') {
+          this.$toast('请输入反馈类型，方便客服联系');
+        } else if (this.editing.phone === '') {
+          this.$toast('请输入手机号码，方便客服联系');
         }
       },
       confirmSelect() {

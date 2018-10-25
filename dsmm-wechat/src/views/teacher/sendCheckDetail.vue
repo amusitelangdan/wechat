@@ -41,15 +41,15 @@
               <div class="timeLeft" style="float: left;margin-right: 1rem">情绪状态:</div>
               <div v-if="dayCheckInfoList.items.feeling === '开心'" class="color-warning">
                 <img :src="require('../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_excietment.png')" alt="" style="width: 1.2rem;height: 1.2rem;display: block;float: left;">
-                <span style="line-height: 1.2rem;font-size: 14px;display: block;float:left;margin-left: .5rem">欢乐兴奋</span>
+                <span style="line-height: 1.2rem;font-size: 14px;display: block;float:left;margin-left: .5rem">超开心</span>
               </div>
               <div v-else-if="dayCheckInfoList.items.feeling === '一般'" class="color-warning">
                 <img :src="require('../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_general.png')" alt="" style="width: 1.2rem;height: 1.2rem;display: block;float: left;">
-                <span style="line-height: 1.2rem;font-size: 14px;display: block;float:left;margin-left: .5rem">一般开心</span>
+                <span style="line-height: 1.2rem;font-size: 14px;display: block;float:left;margin-left: .5rem">很正常</span>
               </div>
               <div v-else-if="dayCheckInfoList.items.feeling === '难过'" class="color-warning">
                 <img :src="require('../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_noHappy.png')" alt="" style="width: 1.2rem;height: 1.2rem;display: block;float: left;">
-                <span style="line-height: 1.2rem;font-size: 14px;display: block;float:left;margin-left: .5rem">不开心</span>
+                <span style="line-height: 1.2rem;font-size: 14px;display: block;float:left;margin-left: .5rem">略低落</span>
               </div>
             </div>
             <div style="overflow: hidden;padding: .5rem 0 0;">

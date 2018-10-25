@@ -57,7 +57,7 @@
             </span>
           </div>
         </el-col>
-        <el-col v-else :span="8" class="border-r background-touch" style="padding: 1.5rem" @touchstart.native="startPress(2)" @touchend.native="endPress(2, '无')">
+        <el-col v-else :span="8" class="border-r background-touch" style="padding: 1.5rem" @touchstart.native="startPress(1)" @touchend.native="endPress(1, '无')">
           <img src="../../assets/img/icon/teacherIndex/lunch.png" style="height: 24px">
           <div>午餐通知</div>
           <div>

@@ -18,8 +18,9 @@
               <img :src="require('../../assets/img/icon/parentIndex/parent_head_three.png')" alt="" style="width: 3rem;height: 3rem;padding: 1rem 0 0;">
               <div class="loginFont" style="padding: 0rem 0 .5rem;">意见反馈</div>
             </el-col>
-            <el-col :span="12" @click.native="jumpRouting(`/service/personal?childId=${selectedChildId}`)">
+            <el-col :span="12" @click.native="jumpRouting(`/service/personal?childId=${selectedChildId}`)" style="position: relative;">
               <img :src="require('../../assets/img/icon/parentIndex/parent_head_four.png')" alt="" style="width: 3rem;height: 3rem;padding: 1rem 0 0;">
+              <img src="../../assets/img/icon/parentIndex/invite.png" alt="" style="position: absolute;top: .6rem;right: 1rem;width: 4rem">
               <div class="loginFont" style="padding: 0rem 0 .5rem;">个人中心</div>
             </el-col>
           </el-row>
