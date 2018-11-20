@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="card">
-      <div class="card-cell" v-for="item in classReadingChildList">
+      <div class="card-cell" v-for="(item,index) in classReadingChildList" :key="index">
         <child-info :name="item.child.name" :gender="item.child.gender" :photo="item.child.photo" :birthday="item.child.birthday"></child-info>
       </div>
     </div>

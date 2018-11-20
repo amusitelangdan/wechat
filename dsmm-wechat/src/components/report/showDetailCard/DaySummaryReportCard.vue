@@ -16,9 +16,9 @@
         </div>
         <el-row style="color: #4d4d4d;padding-bottom: .5rem;">
           <el-col :span="11" style="margin-right: 1rem">
-            <div v-if="JSON.parse(content.items).feeling === '开心'"><span style="display: block;float:left;height: 22px;line-height: 22px">情绪:&nbsp;&nbsp;</span><img :src="require('../../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_excietment.png')" alt="" style="width: 23px;height: 22px;display: block;float:left;"></div>
-            <div v-else-if="JSON.parse(content.items).feeling === '一般'"><span style="display: block;float:left;height: 22px;line-height: 22px">情绪:&nbsp;&nbsp;</span><img :src="require('../../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_general.png')" alt="" style="width: 23px;height: 22px;display: block;float:left;"></div>
-            <div v-else-if="JSON.parse(content.items).feeling === '难过'"><span style="display:block;float:left;height: 22px;line-height: 22px">情绪:&nbsp;&nbsp;</span><img :src="require('../../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_noHappy.png')" alt="" style="width: 23px;height: 22px;display: block;float:left;"></div>
+            <div v-if="JSON.parse(content.items).feeling === '开心' || JSON.parse(content.items).feeling === '超开心'"><span style="display: block;float:left;height: 22px;line-height: 22px">情绪:&nbsp;&nbsp;</span><img :src="require('../../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_excietment.png')" alt="" style="width: 23px;height: 22px;display: block;float:left;"></div>
+            <div v-else-if="JSON.parse(content.items).feeling === '一般' || JSON.parse(content.items).feeling === '很正常'"><span style="display: block;float:left;height: 22px;line-height: 22px">情绪:&nbsp;&nbsp;</span><img :src="require('../../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_general.png')" alt="" style="width: 23px;height: 22px;display: block;float:left;"></div>
+            <div v-else-if="JSON.parse(content.items).feeling === '难过' || JSON.parse(content.items).feeling === '略低落'"><span style="display:block;float:left;height: 22px;line-height: 22px">情绪:&nbsp;&nbsp;</span><img :src="require('../../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_noHappy.png')" alt="" style="width: 23px;height: 22px;display: block;float:left;"></div>
           </el-col>
         </el-row>
       </div>
@@ -33,7 +33,9 @@
 
   export default {
     data() {
-      return {};
+      return {
+        childId: '',
+      };
     },
     props: ['content'],
     computed: {
@@ -43,11 +45,18 @@
     },
     methods: {
       jump() {
+        if (this.selectedChildId) {
+          this.childId = this.selectedChildId;
+        } else if (this.$route.query.childId) {
+          this.childId = this.$route.query.childId;
+        } else {
+          this.childId = this.content.child.id;
+        }
         this.$router.push({
           path: '/day/structure/report',
           query: {
             type: 5,
-            childId: this.selectedChildId ? this.selectedChildId : this.$route.query.childId,
+            childId: parseInt(this.childId, 10),
             classId: this.content.classId,
             reportId: this.content.id,
             time: JSON.parse(this.content.items).detailTime ? JSON.parse(this.content.items).detailTime :

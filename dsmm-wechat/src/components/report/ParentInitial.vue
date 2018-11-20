@@ -80,7 +80,6 @@
               current: item, // 当前显示的图片的HTTP链接
               urls: this.imageUrlList, // 需要预览的图片http链接列表
               success(resolve) {
-                console.log('成功');
                 console.log(resolve);
               },
               cancel(err) {

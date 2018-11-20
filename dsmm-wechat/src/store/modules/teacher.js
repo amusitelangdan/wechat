@@ -47,6 +47,8 @@ const teacher = {
     teacherSelectedChildInfo: {},
     classReadingChildList: [],
     todaySchedule: {},
+    teacherFeeFollowList: [],
+    evaluationList: [],
   },
   mutations: {
     switchTeacherSelectedClassId(state, payload) {
@@ -158,6 +160,102 @@ const teacher = {
       return new Promise((resolve, reject) => {
         api.getChildInfo(urlVars).then((res) => {
           state.teacherSelectedChildInfo = res.obj;
+          resolve(res);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    },
+    // 续费跟进
+    getFollowList({ state }, data) {
+      return new Promise((resolve, reject) => {
+        api.getFollowList(data).then((res) => {
+          state.teacherFeeFollowList = res.obj;
+          resolve(res);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    },
+    postFollowAdd({ state }, data) {
+      return new Promise((resolve, reject) => {
+        api.postFollowAdd(data).then((res) => {
+          resolve(res);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    },
+    getFollowDetail({ state }, data) {
+      return new Promise((resolve, reject) => {
+        api.getFollowDetail(data).then((res) => {
+          resolve(res);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    },
+    // 个人信息修改
+    postTeacherName({ state }, data) {
+      return new Promise((resolve, reject) => {
+        api.postTeacherName(data).then((res) => {
+          resolve(res);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    },
+    getTeacherBirthday({ state }, data) {
+      return new Promise((resolve, reject) => {
+        api.getTeacherBirthday(data).then((res) => {
+          resolve(res);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    },
+    postTeacherPhone({ state }, data) {
+      return new Promise((resolve, reject) => {
+        api.postTeacherPhone(data).then((res) => {
+          resolve(res);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    },
+    // 历史评分
+    getScoreList({ state }, data) {
+      return new Promise((resolve, reject) => {
+        api.getScoreList(data).then((res) => {
+          resolve(res);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    },
+    getScoreDetail({ state }, data) {
+      return new Promise((resolve, reject) => {
+        api.getScoreDetail(data).then((res) => {
+          resolve(res);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    },
+    // 我的好评
+    getEvaluationList({ state }, data) {
+      return new Promise((resolve, reject) => {
+        api.getEvaluationList(data).then((res) => {
+          state.evaluationList = res.obj;
+          resolve(res);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    },
+    getEvaluationAdd({ state }, data) {
+      return new Promise((resolve, reject) => {
+        api.getEvaluationAdd(data).then((res) => {
           resolve(res);
         }).catch((err) => {
           reject(err);

@@ -22,7 +22,7 @@
       <DaySleepStructureReport v-if="type.toString() === '2'" v-bind:course="course"  v-bind:sleepReport="sleepReport"></DaySleepStructureReport>
       <DayTeachStructureReport v-else-if="type.toString() === '4'" v-bind:course="weekLesson" v-bind:time="time" v-bind:weekTime="weekTime"></DayTeachStructureReport>
       <DayCheckStructureReport v-else-if="type.toString() === '1'" v-bind:course="course" v-bind:checkReport="checkReport"></DayCheckStructureReport>
-      <DayLunchStructureReport v-else-if="type.toString() === '3'" v-bind:mondayFood="mondayFood" v-bind:time="time" v-bind:thursdayFood="thursdayFood" v-bind:wednesdayFood="wednesdayFood" v-bind:tuesdayFood="tuesdayFood" v-bind:fridayFood="fridayFood"></DayLunchStructureReport>
+      <DayLunchStructureReport v-else-if="type.toString() === '3' && data.length" v-bind:weekLunch="data" v-bind:time="time" ></DayLunchStructureReport>
       <DaySummaryStructureReport v-else-if="type.toString() === '5'" v-bind:course="course" v-bind:summaryReport="summaryReport"></DaySummaryStructureReport>
     </div>
     <div style="margin-top: 30px;padding: 0 5rem 2rem;">
@@ -43,6 +43,7 @@
   import DaySummaryStructureReport from '../../components/structure/DaySummaryStructureReport';
   import html2canvas from 'html2canvas';
   import { mapActions, mapState } from 'vuex';
+  import moment from 'moment';
 
   export default {
     data() {
@@ -60,31 +61,7 @@
         time: '',
         // type===3时
         mondayFoods: [],
-        mondayFood: {
-          mondayFoodStaple: [],  // 主
-          mondayFoodSupplement: [],  // 辅
-          mondayFoodSoup: [], // 汤
-        },
-        thursdayFood: {
-          thursdayFoodStaple: [],
-          thursdayFoodSupplement: [],
-          thursdayFoodSoup: [],
-        },
-        wednesdayFood: {
-          wednesdayFoodStaple: [],
-          wednesdayFoodSupplement: [],
-          wednesdayFoodSoup: [],
-        },
-        tuesdayFood: {
-          tuesdayFoodStaple: [],
-          tuesdayFoodSupplement: [],
-          tuesdayFoodSoup: [],
-        },
-        fridayFood: {
-          fridayFoodStaple: [],
-          fridayFoodSupplement: [],
-          fridayFoodSoup: [],
-        },
+        data: [],
         // type === 4时
         weekLesson: {
           mondayLesson: [],
@@ -113,6 +90,7 @@
       ...mapState({
         lifeTime: state => state.lifeTime,
         parseBirthday: state => state.parseBirthday,
+        selectedClassId: state => state.parent.selectedClassId,
       }),
     },
     methods: {
@@ -150,7 +128,6 @@
         }
         let link = '';
         if (this.message.photo) {
-          console.log(encodeURIComponent(this.message.photo));
           link = `https://wechat.daishumm.com/static/share.html?url=${this.imageUrl}&imgUrl=${encodeURIComponent(this.message.photo)}`;
         } else {
           link = `https://wechat.daishumm.com/static/share.html?url=${this.imageUrl}`;
@@ -213,7 +190,6 @@
                   data: event.target.result,
                 }).then((url) => {
                   this.imageUrl = encodeURIComponent(url);
-                  console.log(this.imageUrl);
                   this.wxPreview();
                 });
               };
@@ -248,17 +224,12 @@
         childId: this.$route.query.childId,
       }).then((res) => {
         this.message = res.obj;
-        // console.log(this.message.photo);
-        // const tempImage = new Image();
-        // tempImage.src = this.message.photo;
-        // tempImage.setAttribute('crossOrigin', 'Anonymous');
-        // tempImage.onload = () => {
-        //   this.convertImgToBase64(tempImage);
-        // };
       });
       if (this.type.toString() === '3') {
         this.getWeekLunch({
           date: this.time,
+          classId: this.selectedClassId,
+          reportId: this.$route.query.reportId,
         }).then((res) => {
           this.weekLunch = res.obj;
           const mondayFoods = JSON.parse(this.weekLunch.monday).foods;
@@ -266,62 +237,106 @@
           const wednesdayFoods = JSON.parse(this.weekLunch.wednesday).foods;
           const tuesdayFoods = JSON.parse(this.weekLunch.tuesDay).foods;
           const fridayFoods = JSON.parse(this.weekLunch.friday).foods;
+          const mondayFood = {
+            foodStaple: [],
+            foodSupplement: [],
+            foodSoup: [],
+            week: '星期一',
+            date: moment(this.$route.query.time).isoWeekday(1).format('YYYY.MM.DD'),
+          };
+          const thursdayFood = {
+            foodStaple: [],
+            foodSupplement: [],
+            foodSoup: [],
+            week: '星期二',
+            date: moment(this.$route.query.time).isoWeekday(2).format('YYYY.MM.DD'),
+          };
+          const wednesdayFood = {
+            foodStaple: [],
+            foodSupplement: [],
+            foodSoup: [],
+            week: '星期三',
+            date: moment(this.$route.query.time).isoWeekday(3).format('YYYY.MM.DD'),
+          };
+          const tuesdayFood = {
+            foodStaple: [],
+            foodSupplement: [],
+            foodSoup: [],
+            week: '星期四',
+            date: moment(this.$route.query.time).isoWeekday(4).format('YYYY.MM.DD'),
+          };
+          const fridayFood = {
+            foodStaple: [],
+            foodSupplement: [],
+            foodSoup: [],
+            week: '星期五',
+            date: moment(this.$route.query.time).isoWeekday(5).format('YYYY.MM.DD'),
+          };
           mondayFoods.forEach((item) => {
             if (item.typeName === '主菜') {
-              this.mondayFood.mondayFoodStaple.push(item);
+              mondayFood.foodStaple.push(item);
             } else if (item.typeName === '辅菜') {
-              this.mondayFood.mondayFoodSupplement.push(item);
+              mondayFood.foodSupplement.push(item);
             } else if (item.typeName === '汤') {
-              this.mondayFood.mondayFoodSoup.push(item);
+              mondayFood.foodSoup.push(item);
             }
           });
           thursdayFoods.forEach((item) => {
             if (item.typeName === '主菜') {
-              this.thursdayFood.thursdayFoodStaple.push(item);
+              thursdayFood.foodStaple.push(item);
             } else if (item.typeName === '辅菜') {
-              this.thursdayFood.thursdayFoodSupplement.push(item);
+              thursdayFood.foodSupplement.push(item);
             } else if (item.typeName === '汤') {
-              this.thursdayFood.thursdayFoodSoup.push(item);
+              thursdayFood.foodSoup.push(item);
             }
           });
           wednesdayFoods.forEach((item) => {
             if (item.typeName === '主菜') {
-              this.wednesdayFood.wednesdayFoodStaple.push(item);
+              wednesdayFood.foodStaple.push(item);
             } else if (item.typeName === '辅菜') {
-              this.wednesdayFood.wednesdayFoodSupplement.push(item);
+              wednesdayFood.foodSupplement.push(item);
             } else if (item.typeName === '汤') {
-              this.wednesdayFood.wednesdayFoodSoup.push(item);
+              wednesdayFood.foodSoup.push(item);
             }
           });
           tuesdayFoods.forEach((item) => {
             if (item.typeName === '主菜') {
-              this.tuesdayFood.tuesdayFoodStaple.push(item);
+              tuesdayFood.foodStaple.push(item);
             } else if (item.typeName === '辅菜') {
-              this.tuesdayFood.tuesdayFoodSupplement.push(item);
+              tuesdayFood.foodSupplement.push(item);
             } else if (item.typeName === '汤') {
-              this.tuesdayFood.tuesdayFoodSoup.push(item);
+              tuesdayFood.foodSoup.push(item);
             }
           });
           fridayFoods.forEach((item) => {
             if (item.typeName === '主菜') {
-              this.fridayFood.fridayFoodStaple.push(item);
+              fridayFood.foodStaple.push(item);
             } else if (item.typeName === '辅菜') {
-              this.fridayFood.fridayFoodSupplement.push(item);
+              fridayFood.foodSupplement.push(item);
             } else if (item.typeName === '汤') {
-              this.fridayFood.fridayFoodSoup.push(item);
+              fridayFood.foodSoup.push(item);
             }
           });
+          const array = [];
+          array.push(mondayFood);
+          array.push(thursdayFood);
+          array.push(wednesdayFood);
+          array.push(tuesdayFood);
+          array.push(fridayFood);
+          this.data = array;
         });
       }
       if (this.type.toString() === '4') {
         this.getWeekLesson({
           date: this.time,
         }).then((res) => {
+          // console.log(res);
           this.weekLesson.mondayLesson = JSON.parse(res.obj.monday);
           this.weekLesson.thursdayLesson = JSON.parse(res.obj.thursday);
           this.weekLesson.wednesdayLesson = JSON.parse(res.obj.wednesday);
           this.weekLesson.tuesdayLesson = JSON.parse(res.obj.tuesday);
           this.weekLesson.fridayLesson = JSON.parse(res.obj.friday);
+          // console.log(this.weekLesson);
         });
       }
       if (this.type.toString() === '5') {

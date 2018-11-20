@@ -95,8 +95,15 @@
 
 <script>
   // import html2canvas from 'html2canvas';
-  import echarts from 'echarts';
+  // import echarts from 'echarts';
+  import echarts from 'echarts/lib/echarts';
+  import chinaJson from 'echarts/map/json/china.json';
+  import 'echarts/lib/chart/line';
+  import 'echarts/lib/component/tooltip';
+  import 'echarts/lib/component/title';
   import moment from 'moment';
+
+  echarts.registerMap('china', chinaJson);
 
   export default {
     data() {
@@ -263,7 +270,7 @@
             type: 'value',
             min: parseInt(this.maxSleep, 10),
             max: parseInt(this.minSleep, 10),
-            splitNumber: 4, // 设置间隔数
+            splitNumber: 3, // 设置间隔数
             axisLine: {
               show: true,
               lineStyle: {
@@ -276,11 +283,14 @@
               //   fontSize: 13,
               // }, // 修改文字颜色
               formatter(value) {
-                if (value === 900) {
+                if (value < 1000) {
                   return '未睡';
-                } else if (value >= 1000) {
+                } else if (value >= 1100) {
+                  if (value.toString().slice(2) >= 60) {
+                    return `${parseInt(value.toString().slice(0, 2), 10) + 1}:00`;
+                  }
                   return `${value.toString().slice(0, 2)}:${value.toString().slice(2, 4)}`;
-                } else if (value > 900 && value < 1000) {
+                } else if (value > 1000 && value < 1200) {
                   return `0${value.toString().slice(0, 1)}:${value.toString().slice(1, 3)}`;
                 }
               },

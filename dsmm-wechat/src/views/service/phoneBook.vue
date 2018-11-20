@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="card">
-      <div class="card-cell" v-for="teacher in teacherInfoList">
+      <div class="card-cell" v-for="(teacher,index) in teacherInfoList" :key="index">
         <teacher-info style="width: 240px" :name="teacher.name" :phone="teacher.phone" :staffType="teacher.staffType.name" :photo="teacher.photo"></teacher-info>
       </div>
       <div class="card-cell">

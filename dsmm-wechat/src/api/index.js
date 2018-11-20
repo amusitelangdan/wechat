@@ -54,6 +54,20 @@ export const getClassHistoryReportList = data => get('wechat/enter/park/history/
 export const getTodayReportedChildList = (urlVars, data) => get(makeUrl('/wechat/daily/sent/report/data/{classId}/{type}', urlVars, data));
 // 发送报告
 export const postReport = data => post('/wechat/daily/send/report', data);
+// 续费跟进
+export const getFollowList = data => get('/wechat/order/follow/list', data);
+export const postFollowAdd = data => post('/wechat/order/follow/add', data);
+export const getFollowDetail = data => get('/wechat/order/follow/detail', data);
+// 个人信息修改
+export const postTeacherName = data => post('/wechat/personal/modify/staffName', data);
+export const getTeacherBirthday = data => get('/wechat/personal/modify/birthday', data);
+export const postTeacherPhone = data => post('/wechat/personal/modify/phoneNumber', data);
+// 我的评分
+export const getScoreList = data => get('/wechat/personal/survey/score/list', data);
+export const getScoreDetail = data => get('/wechat/personal/survey/score/detail', data);
+// 我的好评
+export const getEvaluationList = data => get('/wechat/personal/evaluation/list', data);
+export const getEvaluationAdd = data => post('/wechat/personal/add/evaluation', data);
 
 // 家长端
 // 获取学校通讯录列表
@@ -70,3 +84,6 @@ export const getInviteCode = data => get('wechat/parent/inviteCode', data);
 // 其他
 // 预约试托
 export const postReserve = data => post('erp/activity/source/leads', data);
+// 用户调研
+export const getStoreInfo = data => get('/wechat/personal/store/info', data);
+export const postSurvey = data => post('/wechat/personal/submit/survey', data);

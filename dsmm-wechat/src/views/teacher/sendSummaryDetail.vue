@@ -4,7 +4,7 @@
       <child-info style="padding: .5rem 0;" :name="teacherSelectedChildInfo.name"
                 :img="teacherSelectedChildInfo.photo"></child-info>
     </div>
-    <div class="card border-b" style="margin:0 0 1rem 0;">
+    <div class="card border-b" style="margin:.8rem 0 0;">
       <div class="card-cell" style="overflow:hidden;" @click="relation">
         <div style="float: left">接宝宝的家长</div>
         <div style="float: right;color: #a8a8a8;"><span v-if="daySummaryInfoList.items.relationPn">{{daySummaryInfoList.items.relationPn}}</span><span v-else>妈妈</span>&nbsp;&nbsp;&nbsp;>
@@ -52,23 +52,23 @@
         </div>
         <div class="old-card-cell">
           <div class="timeLeft" style="float: left;margin-right: 1rem">情绪状况:</div>
-          <div v-if="daySummaryInfoList.items.feeling === '开心'" class="color-warning"
+          <div v-if="daySummaryInfoList.items.feeling === '开心' || daySummaryInfoList.items.feeling === '超开心'" class="color-warning"
                style="float: left;line-height: 1.2rem;overflow:hidden;">
             <img :src="require('../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_excietment.png')"
                  alt="" style="width: 1.2rem;height: 1.2rem;display: block;float: left;">
-            <span style="line-height: 1.2rem;font-size: 14px;display: block;float:left;margin-left: 1rem">欢乐兴奋</span>
+            <span style="line-height: 1.2rem;font-size: 14px;display: block;float:left;margin-left: 1rem">超开心</span>
           </div>
-          <div v-else-if="daySummaryInfoList.items.feeling === '一般'" class="color-warning"
+          <div v-else-if="daySummaryInfoList.items.feeling === '一般' || daySummaryInfoList.items.feeling === '很一般'" class="color-warning"
                style="float: left;line-height: 1.2rem;overflow:hidden;">
             <img :src="require('../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_general.png')"
                  alt="" style="width: 1.2rem;height: 1.2rem;display: block;float: left;">
-            <span style="line-height: 1.2rem;font-size: 14px;display: block;float:left;margin-left: 1rem">一般开心</span>
+            <span style="line-height: 1.2rem;font-size: 14px;display: block;float:left;margin-left: 1rem">很一般</span>
           </div>
-          <div v-else-if="daySummaryInfoList.items.feeling === '难过'" class="color-warning"
+          <div v-else-if="daySummaryInfoList.items.feeling === '难过' || daySummaryInfoList.items.feeling === '略低落'" class="color-warning"
                style="float: left;line-height: 1.2rem;overflow:hidden;">
             <img :src="require('../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_noHappy.png')"
                  alt="" style="width: 1.2rem;height: 1.2rem;display: block;float: left;">
-            <span style="line-height: 1.2rem;font-size: 14px;display: block;float:left;margin-left: 1rem">不开心</span>
+            <span style="line-height: 1.2rem;font-size: 14px;display: block;float:left;margin-left: 1rem">略低落</span>
           </div>
         </div>
         <div class="old-card-cell">
@@ -112,6 +112,7 @@
     name: 'SummaryDetail',
     data() {
       return {
+        flag: true,
         issActive: false,
         isChange: true,
         show: '',
@@ -174,7 +175,13 @@
       },
       // 离园情绪
       depart(value) {
-        this.daySummaryInfoList.items.feeling = value;
+        let data = '超开心';
+        if (value === '难过') {
+          data = '略低落';
+        } else if (value === '一般') {
+          data = '很正常';
+        }
+        this.daySummaryInfoList.items.feeling = data;
       },
       //      提交
       sureSubmit() {
@@ -197,11 +204,16 @@
           shit: this.daySummaryInfoList.items.shit,   // 大便情况
           show: this.show,   // 今日表现
         });
-        this.postReport({
-          type: 5,
-          items: data,
-          memo: this.daySummaryInfoList.memo.replace(/\r\n/g, '\n').replace(/\n/g, '\n').replace(/\s/g, '\n'), // 每日寄语
-        });
+        if (this.flag) {
+          this.flag = false;
+          this.postReport({
+            type: 5,
+            items: data,
+            memo: this.daySummaryInfoList.memo.replace(/\r\n/g, '\n').replace(/\n/g, '\n').replace(/\s/g, '\n'), // 每日寄语
+          }).catch(() => {
+            this.flag = true;
+          });
+        }
         localStorage.setItem('summaryDetail', data);
       },
       error() {
@@ -221,7 +233,6 @@
       init() {
         if (localStorage.getItem('summaryDetail')) {
           const summaryData = JSON.parse(localStorage.getItem('summaryDetail'));
-          console.log(summaryData);
           this.daySummaryInfoList.items.bodyTemperature = summaryData.bodyTemperature;
           this.daySummaryInfoList.items.feeling = summaryData.feeling;
           this.daySummaryInfoList.items.drinkWater = summaryData.drinkWater;
@@ -251,8 +262,6 @@
     padding: 0 0 1rem 0;
     overflow: hidden;
     position: relative;
-    &:not(:last-child) {
-    }
     a {
       text-decoration: none;
     }

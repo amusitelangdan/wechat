@@ -33,7 +33,6 @@
     },
     mounted() {
       this.clientWidth = `${document.documentElement.clientWidth - 73}`;
-      console.log(this.clientWidth);
       this.$refs.imgWidth.style.width = `${this.clientWidth}px`;
     },
     methods: {

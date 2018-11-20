@@ -26,8 +26,15 @@
 </template>
 
 <script>
-  import echarts from 'echarts';
+  // import echarts from 'echarts';
+  import echarts from 'echarts/lib/echarts';
+  import chinaJson from 'echarts/map/json/china.json';
+  import 'echarts/lib/chart/line';
+  import 'echarts/lib/component/tooltip';
+  import 'echarts/lib/component/title';
   import moment from 'moment';
+
+  echarts.registerMap('china', chinaJson);
 
   export default {
     data() {
@@ -46,11 +53,11 @@
       // 基于准备好的DOM初始化echarts实例
       labView() {
         this.feelingContent.forEach((item) => {
-          if (item === '一般') {
+          if (item === '一般' || item === '很正常') {
             this.feeling.push(1);
-          } else if (item === '开心') {
+          } else if (item === '开心' || item === '超开心') {
             this.feeling.push(2);
-          } else if (item === '难过') {
+          } else if (item === '难过' || item === '略低落') {
             this.feeling.push(0);
           }
         });

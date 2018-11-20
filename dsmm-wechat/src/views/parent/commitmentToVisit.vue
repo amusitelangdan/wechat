@@ -46,7 +46,6 @@
       },
     },
     created() {
-      console.log(this.preserveTime);
     },
   };
 </script>

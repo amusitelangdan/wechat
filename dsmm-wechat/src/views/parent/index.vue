@@ -264,7 +264,6 @@
           this.reportList = res.obj.list;
           this.searchCondition.page = res.obj.list.length;
           this.searchCondition.total = res.obj.total;
-          // debugger;
         });
       },
       handleBottomChange(status) {

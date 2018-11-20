@@ -1,9 +1,9 @@
 <template>
   <div>
     <!--班级及老师信息-->
-    <div class="card" style="padding-top: 2rem; padding-bottom: 2rem">
+    <div class="card" style="padding-top: 1rem; padding-bottom: 1rem">
       <el-row type="flex" align="middle">
-        <el-col :span="16" class="border-r">
+        <el-col :span="16">
           <div style="margin-bottom: 1rem;"><img src="../../assets/img/icon/teacherIndex/store.png" style="width: 20px; margin-right: 0.5rem; vertical-align: middle">{{storeName}}</div>
           <el-col :span="16">
             <div><img src="../../assets/img/icon/teacherIndex/class.png" style="width: 20px; margin-right: 0.5rem; vertical-align: middle">{{className}}</div>
@@ -12,25 +12,26 @@
             <span style="font-size: 12px; margin-right: 1rem" @click="classSelect">[切换班级]</span>
           </el-col>
         </el-col>
-        <el-col :span="8">
+        <el-col :span="8" class="border-l" @touchstart.native="startPersonal" @touchmove.native="movePersonal" @touchend.native="personal" :class="{changeBackground: changeTouch}">
           <div v-if="tokenTeacherInfo.photo"  style="width: 50px;height: 50px; display: block; border-radius: 50%; margin: auto; overflow: hidden; position: relative;background-repeat: no-repeat;background-size: cover" :style="{backgroundImage: `url(${tokenTeacherInfo.photo})`}">
           </div>
           <div v-else style="width: 50px;height: 50px; display: block; border-radius: 50%; margin: auto; overflow: hidden; position: relative;background-repeat: no-repeat;background-size: cover;" :style="{backgroundImage: `url(${require('../../assets/img/icon/defaultAvatar/teacher_default_avator.png')})`}">
           </div>
           <div style="text-align: center;margin-top:.8rem">{{tokenTeacherInfo.name}}</div>
+          <div style="text-align: center;background-color: #F5A626;color: #fff;margin: .5rem auto 0;width: 5rem;border-radius: 1rem;font-size: 12px">我的星级</div>
         </el-col>
       </el-row>
     </div>
     <!--工作台-->
-    <div class="card" style="padding: 0">
+    <div class="card" style="padding: 0;margin: 10px 0;">
       <div class="card-cell">
-        <div style="padding:0 1rem;height: 100%;line-height: 100%;">
+        <div style="padding:0 1rem;height: 100%;line-height: 100%;color: #666666;font-size: 12px">
           工作台
         </div>
       </div>
       <!--@click.native='toPage(`/teacher/sendList?type=1`)'-->
       <el-row type="flex" justify="center" align="middle" style="text-align: center" class="border-b">
-        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem;background: #fff" @touchstart.native="startPress(0)" @touchend.native="endPress(0, `/teacher/sendList?type=1`)">
+        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem;" @touchstart.native="startPress(0)" @touchend.native="endPress(0, `/teacher/sendList?type=1`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 0}">
           <img src="../../assets/img/icon/teacherIndex/check.png" style="height: 24px">
           <div>入园晨检</div>
           <div>
@@ -44,7 +45,7 @@
           </div>
         </el-col>
         <!--@click.native='toPage(`/teacher/sendList?type=3`)'-->
-        <el-col v-if="todayLunch !== null" :span="8" class="border-r background-touch" style="padding: 1.5rem" @touchstart.native="startPress(1)" @touchend.native="endPress(1, `/teacher/sendList?type=3`)">
+        <el-col v-if="todayLunch !== null" :span="8" class="border-r background-touch" style="padding: 1.5rem" @touchstart.native="startPress(1)" @touchend.native="endPress(1, `/teacher/sendList?type=3`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 1}">
           <img src="../../assets/img/icon/teacherIndex/lunch.png" style="height: 24px">
           <div>午餐通知</div>
           <div>
@@ -57,7 +58,7 @@
             </span>
           </div>
         </el-col>
-        <el-col v-else :span="8" class="border-r background-touch" style="padding: 1.5rem" @touchstart.native="startPress(1)" @touchend.native="endPress(1, '无')">
+        <el-col v-else :span="8" class="border-r background-touch" style="padding: 1.5rem" @touchstart.native="startPress(1)" @touchend.native="endPress(1, '无')" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 1}">
           <img src="../../assets/img/icon/teacherIndex/lunch.png" style="height: 24px">
           <div>午餐通知</div>
           <div>
@@ -70,7 +71,7 @@
             </span>
           </div>
         </el-col>
-        <el-col class="background-touch" :span="8" style="padding: 1.5rem" @touchstart.native="startPress(2)" @touchend.native="endPress(2, `/teacher/sendList?type=2`)">
+        <el-col class="background-touch" :span="8" style="padding: 1.5rem" @touchstart.native="startPress(2)" @touchend.native="endPress(2, `/teacher/sendList?type=2`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 2}">
           <img src="../../assets/img/icon/teacherIndex/sleep.png" style="height: 24px">
           <div>午睡消息</div>
           <div>
@@ -85,7 +86,7 @@
         </el-col>
       </el-row>
       <el-row type="flex" justify="center" align="middle" style="text-align: center" class="border-b">
-        <el-col v-if="todayReportCount.dailyLesson.checkedCount !== todayReportCount.dailyLesson.studentCount && todayLesson !== null" :span="8" class="border-r background-touch" style="padding: 1.5rem" @touchstart.native="startPress(3)" @touchend.native="endPress(3, `/teacher/dayTeach/sendDetail?type=4`)">
+        <el-col v-if="todayReportCount.dailyLesson.checkedCount !== todayReportCount.dailyLesson.studentCount && todayLesson !== null" :span="8" class="border-r background-touch" style="padding: 1.5rem" @touchstart.native="startPress(3)" @touchend.native="endPress(3, `/teacher/dayTeach/sendDetail?type=4`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 3}">
           <img src="../../assets/img/icon/teacherIndex/teach.png" style="height: 24px">
           <div>每日课程</div>
           <div>
@@ -98,7 +99,7 @@
             </span>
           </div>
         </el-col>
-        <el-col v-if="todayReportCount.dailyLesson.checkedCount === todayReportCount.dailyLesson.studentCount && todayLesson !== null" :span="8" class="border-r background-touch" style="padding: 1.5rem"  @touchstart.native="startPress(3)" @touchend.native="endPress(3, `/teacher/dayTeach/sendDetail?type=4`)">
+        <el-col v-if="todayReportCount.dailyLesson.checkedCount === todayReportCount.dailyLesson.studentCount && todayLesson !== null" :span="8" class="border-r background-touch" style="padding: 1.5rem"  @touchstart.native="startPress(3)" @touchend.native="endPress(3, `/teacher/dayTeach/sendDetail?type=4`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 3}">
           <img src="../../assets/img/icon/teacherIndex/teach.png" style="height: 24px">
           <div>每日课程</div>
           <div>
@@ -111,7 +112,7 @@
             </span>
           </div>
         </el-col>
-        <el-col v-if="todayLesson === null" :span="8" class="border-r background-touch" style="padding: 1.5rem;" @touchstart.native="startPress(3)" @touchend.native="endPress(3, '无')">
+        <el-col v-if="todayLesson === null" :span="8" class="border-r background-touch" style="padding: 1.5rem;" @touchstart.native="startPress(3)" @touchend.native="endPress(3, '无')" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 3}">
           <img src="../../assets/img/icon/teacherIndex/teach.png" style="height: 24px">
           <div>每日课程</div>
           <div>
@@ -124,7 +125,7 @@
             </span>
           </div>
         </el-col>
-        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem" @touchstart.native="startPress(4)" @touchend.native="endPress(4, `/teacher/sendList?type=5`)">
+        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem" @touchstart.native="startPress(4)" @touchend.native="endPress(4, `/teacher/sendList?type=5`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 4}">
           <img src="../../assets/img/icon/teacherIndex/summary.png" style="height: 24px">
           <div>日总结</div>
           <div>
@@ -137,24 +138,53 @@
             </span>
           </div>
         </el-col>
-        <el-col class="background-touch" :span="8" style="padding: 1.5rem" @touchstart.native="startPress(5)" @touchend.native="endPress(5, `/teacher/customize/select?classId=${teacherSelectedClassId}`)">
-          <div style="height: .8rem;"></div>
+        <el-col class="background-touch" :span="8" style="padding: 1.5rem 1.5rem 2.2rem" @touchstart.native="startPress(5)" @touchend.native="endPress(5, `/teacher/customize/select?classId=${teacherSelectedClassId}`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 5}">
           <img src="../../assets/img/icon/teacherIndex/custom_info.png" style="height: 24px">
           <div>自定义信息</div>
           <div style="height: .8rem;"></div>
         </el-col>
       </el-row>
+    </div>
+    <div class="card" style="padding: 0;margin: 10px 0;">
+      <div class="card-cell">
+        <div style="padding:0 1rem;height: 100%;line-height: 100%;color: #666666;font-size: 12px">
+          查询
+        </div>
+      </div>
       <el-row justify="center" align="middle" style="text-align: center">
-        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem" @touchstart.native="startPress(6)" @touchend.native="endPress(6, `/teacher/student/list`)">
-          <div style="height: .8rem;"></div>
+        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem 1.5rem 2.2rem" @touchstart.native="startPress(6)" @touchend.native="endPress(6, `/teacher/history/report/list`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 6}">
           <img src="../../assets/img/icon/teacherIndex/student.png" style="height: 24px">
           <div>学员名单</div>
           <div style="height: .8rem;"></div>
         </el-col>
-        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem" @touchstart.native="startPress(7)" @touchend.native="endPress(7, `/teacher/history/report/list`)">
-          <div style="height: .8rem;"></div>
+        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem 1.5rem 2.2rem" @touchstart.native="startPress(7)" @touchend.native="endPress(7, `/teacher/history/list`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 7}">
+          <!--/teacher/student/list-->
           <img src="../../assets/img/icon/teacherIndex/history.png" style="height: 24px">
           <div>历史消息</div>
+          <div style="height: .8rem;"></div>
+        </el-col>
+        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem 1.5rem 2.2rem" @touchstart.native="startPress(8)" @touchend.native="endPress(8, `/teacher/scoreList`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 8}">
+          <img src="../../assets/img/icon/teacherIndex/score.png" style="height: 24px">
+          <div>我的评分</div>
+          <div style="height: .8rem;"></div>
+        </el-col>
+      </el-row>
+    </div>
+    <div class="card" style="padding: 0;margin: 10px 0 0;">
+      <div class="card-cell">
+        <div style="padding:0 1rem;height: 100%;line-height: 100%;color: #666666;font-size: 12px">
+          绩效工作台
+        </div>
+      </div>
+      <el-row justify="center" align="middle" style="text-align: center">
+        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem 1.5rem 2.2rem" @touchstart.native="startPress(9)" @touchend.native="endPress(9, `/teacher/renewalList`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 9}">
+          <img src="../../assets/img/icon/teacherIndex/renewalFee.svg" style="height: 24px">
+          <div>续费跟进</div>
+          <div style="height: .8rem;"></div>
+        </el-col>
+        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem 1.5rem 2.2rem" @touchstart.native="startPress(10)" @touchend.native="endPress(10, `/teacher/praise`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 10}">
+          <img src="../../assets/img/icon/teacherIndex/evaluate.png" style="height: 24px">
+          <div>我的好评</div>
           <div style="height: .8rem;"></div>
         </el-col>
       </el-row>
@@ -203,6 +233,10 @@
         className: '',
         todayLesson: '',
         todayLunch: '',
+        touchPress: true,
+        changeBack: '',
+        moveTouch: true,
+        changeTouch: false,
       };
     },
     computed: {
@@ -242,18 +276,37 @@
         refreshToken: 'refreshToken',
         getWeekLesson: 'getWeekLesson',
       }),
+      startPersonal() {
+        this.changeTouch = true;
+        this.moveTouch = true;
+      },
+      movePersonal() {
+        this.moveTouch = false;
+      },
+      personal() {
+        this.changeTouch = false;
+        if (this.moveTouch) {
+          this.$router.push('/teacher/personal');
+        }
+      },
       startPress(index) {
-        document.getElementsByClassName('background-touch')[index].style.background = '#e4e4e4';
+        this.changeBack = index;
+        this.touchPress = true;
+      },
+      movePress() {
+        this.touchPress = false;
       },
       endPress(index, link) {
-        document.getElementsByClassName('background-touch')[index].style.background = '';
-        if (link === '无') {
-          this.$toast('今日暂时没有安排');
-        } else if (link !== '无') {
-          if (this.todayReportCount.dailyLesson.checkedCount === this.todayReportCount.dailyLesson.studentCount && link === '/teacher/dayTeach/sendDetail?type=4') {
-            this.$toast('今日已经发送过课程');
-          } else {
-            this.$router.push(link);
+        this.changeBack = '';
+        if (this.touchPress) {
+          if (link === '无') {
+            this.$toast('今日暂时没有安排');
+          } else if (link !== '无') {
+            if (this.todayReportCount.dailyLesson.checkedCount === this.todayReportCount.dailyLesson.studentCount && link === '/teacher/dayTeach/sendDetail?type=4') {
+              this.$toast('今日已经发送过课程');
+            } else {
+              this.$router.push(link);
+            }
           }
         }
       },
@@ -321,4 +374,7 @@
   };
 </script>
 <style lang="less">
+  .changeBackground{
+    background: rgba(0,0,0,0.1);
+  }
 </style>

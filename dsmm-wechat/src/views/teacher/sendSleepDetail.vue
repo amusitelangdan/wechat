@@ -114,6 +114,7 @@
     data() {
       return {
         // 是否提交成功
+        flag: true,
 //          入睡时长
         durationVisible: false,
 //        入睡方式
@@ -187,7 +188,6 @@
         this.popupSleep = false;
       },
       success() {
-        console.log('111');
         this.popupSleep = false;
         let data = {};
         if (this.daySleepInfoList.items.modeValue !== '拒绝睡觉') {
@@ -212,7 +212,12 @@
           memo: this.daySleepInfoList.memo.replace(/\r\n/g, '\n').replace(/\n/g, '\n').replace(/\s/g, '\n'),
         };
         localStorage.setItem('sleepDetail', JSON.stringify(payload));
-        this.postReport(payload);
+        if (this.flag) {
+          this.flag = false;
+          this.postReport(payload).catch(() => {
+            this.flag = true;
+          });
+        }
       },
       timeSelect() {
         this.$refs.picker.open();
@@ -247,7 +252,6 @@
       },
       //      提交
       sureSubmit() {
-        console.log(this.daySleepInfoList.memo.replace(/\r\n/g, '\n').replace(/\n/g, '\n').replace(/\s/g, '\n'));
         if (this.daySleepInfoList.items.modeValue === '拒绝睡觉') {
           this.daySleepInfoList.items.napTime = '----';
         }

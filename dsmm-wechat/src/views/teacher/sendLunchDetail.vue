@@ -40,7 +40,7 @@
           <div style="width: 37px;height: 1.2rem;position: absolute;top: 2.8rem;left: 58%;">1/2</div>
           <div style="width: 37px;height: 1.2rem;position: absolute;top: 2.8rem;left: 75.5%;">2/3</div>
           <div style="width: 37px;height: 1.2rem;position: absolute;top: 2.8rem;left: 90%;">吃完</div>
-          <span style="width: 5rem;margin-right: 1rem;margin-top: .7rem">{{item.content}}</span>
+          <span style="width: 5rem;margin-right: 1rem;margin-top: .7rem;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;">{{item.content}}</span>
           <el-slider
             :show-tooltip="false"
             v-model="item.initial"
@@ -117,7 +117,7 @@
     data() {
       return {
         // 是否提交成功
-        sure: true,
+        flag: true,
         value7: 0,
         dish: '',
         mainFood: '',
@@ -155,7 +155,13 @@
       const d = new Date();
       this.detailTime = moment(d).format('YYYY-MM-DD');
       const data = JSON.parse(this.todaySchedule.todayLunch).foods;
-      this.dayLunchInfoList.items.todayLunch = data.map(item => ({
+      const lunchData = [];
+      data.forEach((index) => {
+        if (index.foodName) {
+          lunchData.push(index);
+        }
+      });
+      this.dayLunchInfoList.items.todayLunch = lunchData.map(item => ({
         content: item.foodName,
         initial: 0,
         value: '没吃',
@@ -232,7 +238,12 @@
           items: data,
           memo: this.dayLunchInfoList.memo.replace(/\r\n/g, '\n').replace(/\n/g, '\n').replace(/\s/g, '\n'),
         };
-        this.postReport(payload);
+        if (this.flag) {
+          this.flag = false;
+          this.postReport(payload).catch(() => {
+            this.flag = true;
+          });
+        }
       },
       // 图片上传
       uploaded(index) {

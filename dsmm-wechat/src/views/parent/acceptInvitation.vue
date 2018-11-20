@@ -8,7 +8,10 @@
       <input class="input_line" type="number" placeholder="输入邀请码" v-model="code">
       <span style="font-size: 12px;padding: .5rem 0;display: block;color: #F5A626;width: 9rem" class="color-info" @click="obtain">如何获取邀请码?</span>
       <div style="position: relative"  @click="popupVisible=true">
-        <div class="input_line"  v-model="relationCn" style="position: relative; z-index: 0"><span v-if="relationCn">{{relationCn}}</span><span v-else style="color: #909399">与宝宝的关系</span></div>
+        <div class="input_line"  style="position: relative; z-index: 0">
+          <span v-if="relationCn">{{relationCn}}</span>
+          <span v-else style="color: #909399">与宝宝的关系</span>
+        </div>
         <div style="font-size: 2rem" class="color-info">
           <i class="el-icon-caret-bottom" style="position: absolute; right: 0; top: 50%; transform: translateY(-50%)"></i>
         </div>

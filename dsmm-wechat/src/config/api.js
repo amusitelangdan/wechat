@@ -1,4 +1,6 @@
-// api接口
+/**
+ * api 接口相关 配置文件
+ */
 const TestHost = 'https://api-gateway-test.daishumm.com';
 // const TestHost = 'http://192.168.31.67:8889';
 const ProdHost = 'https://api-gateway.daishumm.com';

@@ -1,4 +1,8 @@
-import 'babel-polyfill';
+// import 'babel-polyfill';
+// import 'core-js/es5';
+import 'core-js/es7/object';
+import 'core-js/es6/promise';
+import 'core-js/es7/promise';
 import Vue from 'vue';
 import App from './App';
 import router from './router';
@@ -23,6 +27,10 @@ import VideoPlayer from 'vue-video-player';
 import 'video.js/dist/video-js.css';
 
 require('vue-video-player/src/custom-theme.css');
+
+import Raven from 'raven-js';
+import RavenVue from 'raven-js/plugins/vue';
+
 
 Vue.use(VideoPlayer);
 Vue.use(Loading);
@@ -57,7 +65,6 @@ router.beforeEach((to, from, next) => {
 });
 router.afterEach((to, from, next) => {
   const u = navigator.userAgent;
-  console.log(u);
   const IOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); // ios终端
   if (IOS) {
     store.dispatch('getWxConfig', {
@@ -97,6 +104,21 @@ router.afterEach((to, from, next) => {
 });
 
 Vue.config.productionTip = false;
+
+// console.log(`123${process.env.NODE_ENV === 'development'}`);
+// console.log(process.env);
+// 使用sentry对错误日志进行监控
+if (process.env.NODE_ENV === 'development') {
+  Raven
+    .config('http://358eabfd9312408b9d50239f2e64e61d@172.16.56.66:9000/8')
+    .addPlugin(RavenVue, Vue)
+    .install();
+} else {
+  Raven
+    .config('http://7f45a85a2e8f4a29b8c3501bdf850e3b@172.16.56.66:9000/11')
+    .addPlugin(RavenVue, Vue)
+    .install();
+}
 
 /* eslint-disable no-new */
 new Vue({

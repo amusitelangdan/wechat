@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="card">
-      <div class="card-cell" v-for="(item, relationEn) in parent">
+      <div class="card-cell" v-for="(item, relationEn) in parent" :key="relationEn"> 
         <span>{{relationType[relationEn]}}</span>
         <span style="margin-left: 2rem" v-if="item.phone">{{item.phone}}</span>
         <span style="margin-left: 2rem" v-if="!item.phone" class="color-info">未绑定</span>

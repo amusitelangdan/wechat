@@ -14,7 +14,7 @@ export function isIos() {
 }
 
 export function isAndroid() {
-  return /(iphone|ipad|ipod|ios)/i.test(navigator.userAgent.toLowerCase());
+  return window.navigator.userAgent.indexOf('Android') > -1 || window.navigator.userAgent.indexOf('Adr') > -1;
 }
 
 /* 合法uri */
@@ -41,3 +41,68 @@ export function validatAlphabets(str) {
   return reg.test(str);
 }
 
+export function hasVal(val) {
+  // trim 删除两边空格
+  return val && val.trim && val.trim().length;
+}
+
+
+/**
+ * 根据对应的验证对象验证结果
+ * @param  {Object} agrn        验证对象
+ * @param  {Function|RegExp}    agrn.rule   具体验证主体
+ * @param  {String} agrn.type   验证类型(支持Function|RegExp)
+ * @param  {Object} agrn        验证对象
+ * @param  {String|Boolean}     value 需要被验证的结果
+ * @return {Boolean}            验证结果
+ */
+function validate(agrn, value) {
+  let flag = false;
+  const { rule, type } = agrn;
+  switch (type) {
+    case 'regExp':
+      flag = rule.test(value);
+      break;
+    case 'function':
+      flag = rule(value);
+      break;
+    default:
+      break;
+  }
+  return flag;
+}
+function validByArray(rules, value) {
+  const result = { valid: true, errorMessage: '' };
+  for (let i = 0; i < rules.length; i += 1) {
+    const { errorMessage } = rules[i];
+    if (!validate(rules[i], value)) {
+      result.valid = false;
+      result.errorMessage = errorMessage || '';
+      break;
+    }
+  }
+  return result;
+}
+
+/**
+ * 验证 value 是否通过 rules验证数组 验证
+ * @param  {String|Boolean} value
+ * @param  {Array|Object} rules    验证规则(Array:数组中交集 &&,Object:对象中为并集 || )
+ * @return {Object} result
+ * @return {Boolean} result.valid  验证结果:true通过/false未通过
+ * @return {String} result.errorMessage    报错信息
+ */
+export default function onValidate(value, rules) {
+  let result = {};
+  if (rules instanceof Array) {
+    result = validByArray(rules, value);
+  } else if (Object.values(rules).length > 0) {
+    Object.values(rules).forEach((item) => {
+      if (!result.valid) {
+        result = validByArray(item, value);
+      }
+    });
+  }
+  result.type = '';
+  return result;
+}

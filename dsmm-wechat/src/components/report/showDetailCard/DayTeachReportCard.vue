@@ -29,7 +29,9 @@
 
   export default {
     data() {
-      return {};
+      return {
+        childId: '',
+      };
     },
     props: ['content'],
     computed: {
@@ -39,11 +41,18 @@
     },
     methods: {
       jump() {
+        if (this.selectedChildId) {
+          this.childId = this.selectedChildId;
+        } else if (this.$route.query.childId) {
+          this.childId = this.$route.query.childId;
+        } else {
+          this.childId = this.content.child.id;
+        }
         this.$router.push({
           path: '/day/structure/report',
           query: {
             type: 4,
-            childId: this.selectedChildId ? this.selectedChildId : this.$route.query.childId,
+            childId: parseInt(this.childId, 10),
             classId: this.content.classId,
             reportId: this.content.id,
             time: decodeURIComponent(this.content.items ? JSON.parse(this.content.items).time : ''),

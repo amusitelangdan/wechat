@@ -75,7 +75,7 @@
 </template>
 <script>
   import { mapState, mapActions } from 'vuex';
-  import config from '../api/config';
+  import { apiConfig as config } from '../config';
 
   let clearTimer = null;
   export default {
@@ -114,7 +114,6 @@
               this.getPhoneVerificationCode({
                 phoneNumber: this.phone,
               }).then((res) => {
-                // debugger;
                 if (res.code === 200) {
                   clearTimer = setInterval(() => {
                     if (maxTime > 0 && maxTime !== 1) {

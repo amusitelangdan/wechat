@@ -1,7 +1,6 @@
 {
   "presets": [
     ["env", {
-      "modules": false,
       "targets": {
         "browsers": ["> 1%", "last 2 versions", "not ie <= 8"]
       }
@@ -11,10 +10,17 @@
   "env": {
     "test": {
       "presets": ["env", "stage-2"],
-      "plugins": ["istanbul"]
+      "plugins": ["transform-vue-jsx","istanbul"]
     }
   },
   "plugins": [
+    "transform-vue-jsx",
+    ["transform-runtime",{
+        "helpers": false,
+        "polyfill": false,
+        "regenerator": true,
+        "moduleName": "babel-runtime"
+    }],
     [
       "component",
       {

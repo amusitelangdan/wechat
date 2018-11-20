@@ -9,7 +9,7 @@
           </div>
         </el-col>
         <el-col :span="15">
-          <div style="white-space: nowrap">{{name}}</div>
+          <div style="white-space: nowrap;margin-top: 0.5rem;">{{name}}</div>
           <div style="margin-top: 0.5rem; white-space: nowrap" v-if="gender || birthday">
             <img class="headInfoImg" src="../../assets/img/icon/personal/female_new.png" v-if="gender === 2">
             <img class="headInfoImg" src="../../assets/img/icon/personal/male_new.png" v-if="gender === 1">

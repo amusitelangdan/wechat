@@ -7,8 +7,9 @@
         <div v-for="(child, index) in childList" :key="index">
           <div v-if="child.id === selectChildId">
             <div style="width: 80px;height: 80px;border-radius: 80px;background: rgba(255,255,255,0.6);margin: 4rem auto 0;position: relative;overflow:hidden;">
-              <img v-if="child.photo" :src="child.photo" style="width: 65px; vertical-align: middle;left: 50%; top: 50%; position: absolute; transform: translate(-50%,-50%);overflow:hidden;">
+              <!--<img v-if="child.photo" :src="child.photo" style="width: 65px; vertical-align: middle;left: 50%; top: 50%; position: absolute; transform: translate(-50%,-50%);overflow:hidden;border-radius: 100%">-->
               <img v-if="!child.photo" :src="require('../../assets/img/icon/defaultAvatar/defaultAvatar.png')" style="width: 65px; vertical-align: middle;left: 50%; top: 50%; position: absolute; transform: translate(-50%,-50%)">
+              <div v-if="child.photo" :style="{backgroundImage: `url(${child.photo})`,backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" style="width: 70px;height:70px;left: 50%; top: 50%; position: absolute; transform: translate(-50%,-50%);border-radius: 100%;"></div>
             </div>
             <div style="text-align:center;margin: .6rem auto 0;color: #ffffff;">
               <div style="padding: .1rem 0;">宝宝: {{child.name}}</div>
@@ -61,7 +62,7 @@
       </div>
     </div>
     <div class="card" style="margin: 0;">
-      <div class="card-cell_link" @click="logout">
+      <div class="card-cell" @click="logout">
         退出登录
       </div>
     </div>

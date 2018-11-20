@@ -210,7 +210,6 @@
       commentSubmission() {
         // 请求评论
         let childId = '';
-        console.log(this.report);
         if (this.selectedChildId) {
           childId = this.selectedChildId;
         } else if (this.report.createChildId) {

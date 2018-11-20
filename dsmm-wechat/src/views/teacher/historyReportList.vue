@@ -4,7 +4,7 @@
       <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"
                    :bottomPullText='bottomPullTextVal' :bottomDropText='bottomDropTextVal'
                    :bottomLoadingText='bottomLoadingTextVal' @bottom-status-change="handleBottomChange" :autoFill="false"  ref="loadmore">
-        <div  v-for="(item, index) in createList.list" :key="index" style="margin-bottom: 1rem">
+        <div  v-for="(item, index) in createList.list" :key="index" style="margin-top: .7rem">
           <div class="card-cell" style="background: #fff;border: 0;padding: 1rem;">
             <div style="overflow: hidden;display: flex">
               <div class="list" v-if="item.type === 1">
@@ -29,7 +29,7 @@
                 <img src="../../assets/img/icon/history/history_customize.png" alt="" class="list-right">
               </div>
               <div style="width: 79%;height: 5rem;">
-                <div style="font-weight: bold;font-size: 14px">
+                <div style="font-weight: bold;font-size: 14px;display: flex">
                   <div v-if="item.type === 1">晨检报告</div>
                   <div v-else-if="item.type === 2">今日午睡</div>
                   <div v-else-if="item.type === 3">午餐信息</div>
@@ -37,12 +37,12 @@
                   <div v-else-if="item.type === 5">每日总结</div>
                   <div v-else-if="item.type === 6">自定义报告</div>
                   <div v-else-if="item.type === 7">自定义报告</div>
+                  <div style="flex:1;color: #969896;font-weight: 400;font-size: 12px;line-height: 18px;text-align: right">{{parseTime(item.createTime)}}</div>
                 </div>
                 <div style="display: flex;height: 2rem;font-size: 12px;line-height: 2rem;overflow: hidden">
                   <div style="flex: 1;">
                     <div v-if="item.memo">{{item.memo}}</div>
                   </div>
-                  <div style=" color: #969896">{{parseTime(item.createTime)}}</div>
                 </div>
                 <div style="font-size: 12px">
                   <div style="height: 25px; color: #969896;line-height: 25px;">
@@ -64,6 +64,9 @@
           </div>
         </div>
       </mt-loadmore>
+    </div>
+    <div class="layout-fixed" @click="shareScollTop">
+      <img src="../../assets/img/icon/history/history_goTop.svg" alt="" width="25" height="25">
     </div>
   </div>
 </template>
@@ -107,6 +110,7 @@
       ...mapState({
         teacherSelectedClassId: state => state.teacher.teacherSelectedClassId,
         parseTime: state => state.parseTime,
+        saveScrollHistory: state => state.saveScrollHistory,
       }),
     },
     methods: {
@@ -124,6 +128,9 @@
           this.$refs.loadmore.onBottomLoaded();
         }
       },
+      shareScollTop() {
+        document.getElementsByClassName('page-loadmore-wrapper')[0].scrollTop = 0;
+      },
       handleBottomChange(status) {
         this.bottomStatus = status;
       },
@@ -132,18 +139,7 @@
           this.historyListInfo();
         } else if (this.searchCondition.pageVal !== 0) {
           if (this.searchCondition.page < this.createList.total) {
-            this.getClassHistoryReportList({
-              classId: this.classId,
-              pageNumber: this.searchCondition.pageVal,
-            }).then((res) => {
-              this.searchCondition.page = this.searchCondition.page + res.obj.list.length;
-              if (this.searchCondition.page <= this.searchCondition.total) {
-                res.obj.list.forEach((item) => {
-                  this.createList.list.push(item);
-                });
-                return this.createList.list;
-              }
-            });
+            this.historyListInfo();
           } else if (this.searchCondition.page > this.createList.total) {
             this.allLoaded = true;
           }
@@ -154,15 +150,12 @@
           classId: this.classId,
           pageNumber: this.searchCondition.pageVal,
         }).then((res) => {
-          const data = [];
           this.pickerFor = res.obj.total;
           this.searchCondition.total = res.obj.total;
           this.searchCondition.page = res.obj.list.length;
           res.obj.list.forEach((item) => {
-            data.push(item);
+            this.createList.list.push(item);
           });
-          this.createList.list = data;
-          console.log(this.createList.list);
           this.createList.pageNumber = res.obj.pageNumber;
           this.createList.pageSize = res.obj.pageSize;
           this.createList.total = res.obj.total;
@@ -181,6 +174,39 @@
     },
     mounted() {
       this.wrapperHeight = document.documentElement.clientHeight - this.$refs.wrapper.getBoundingClientRect().top;
+      if (document.getElementsByClassName('page-loadmore-wrapper')) {
+        setTimeout(() => {
+          this.$nextTick(() => {
+            document.getElementsByClassName('page-loadmore-wrapper')[0].addEventListener('scroll', () => {
+              this.$store.commit('saveHistoryScroll', document.getElementsByClassName('page-loadmore-wrapper')[0].scrollTop);
+            });
+          });
+        }, 1000);
+      }
+    },
+    activated() {  // activated 为keep-alive加载时调用
+      if (this.classId !== this.teacherSelectedClassId) {
+        this.classId = this.teacherSelectedClassId;
+        this.pickerFor = 0;
+        this.searchCondition.total = 0;
+        this.searchCondition.page = 0;
+        this.createList.list = [];
+        this.createList.pageNumber = 0;
+        this.createList.pageSize = 0;
+        this.createList.total = 0;
+        this.searchCondition.pageVal = 1;
+        document.getElementsByClassName('page-loadmore-wrapper')[0].scrollTop = 0;
+        this.historyListInfo();
+      } else if (this.classId === this.teacherSelectedClassId) {
+        if (this.saveScrollHistory > 0) {
+          document.getElementsByClassName('page-loadmore-wrapper')[0].scrollTop = this.saveScrollHistory;
+        }
+      }
+    },
+    beforeUpdate() {
+      this.$nextTick(() => {
+        document.getElementsByClassName('page-loadmore-wrapper')[0].scrollTop = this.saveScrollHistory;
+      });
     },
     created() {
       this.classId = this.teacherSelectedClassId;
@@ -210,5 +236,20 @@
     overflow:auto;
     -webkit-overflow-scrolling : touch; // 解决view滑动速度慢或者卡顿问题
   }
-
+  .layout-fixed{
+    position: fixed;
+    bottom: 2rem;
+    right: 1rem;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 3.5rem;
+    background-color: #fff;
+    box-shadow: 0 3px 5px #cccccc,0 -3px 5px #cccccc, 3px 0px 5px #cccccc, -3px 0px 5px #cccccc;
+     img {
+       position: absolute;
+       top: 50%;
+       left: 50%;
+       transform: translate(-50%, -50%);
+     }
+  }
 </style>

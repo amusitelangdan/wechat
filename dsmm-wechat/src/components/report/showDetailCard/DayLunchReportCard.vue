@@ -6,21 +6,16 @@
       </div>
       <div style="flex: 1;">
         <div class="title" style="color: #ffac28;">今日午餐</div>
-        <div style="display: flex;color: #4d4d4d;padding-bottom: .5rem">
-          <div style="flex: 1;">{{JSON.parse(content.items).todayLunch.length !== 0 ? JSON.parse(content.items).todayLunch[0].content : ''}}:&nbsp;{{JSON.parse(content.items).todayLunch.length !== 0 ? JSON.parse(content.items).todayLunch[0].value : ''}}</div>
-          <div style="width: 6rem;">{{JSON.parse(content.items).todayLunch.length !== 0 ? JSON.parse(content.items).todayLunch[1].content : ''}}:&nbsp;{{JSON.parse(content.items).todayLunch.length !== 0 ? JSON.parse(content.items).todayLunch[1].value : ''}}</div>
-        </div>
-        <div style="display: flex;color: #4d4d4d;padding-bottom: .5rem">
-          <div style="flex: 1;">{{JSON.parse(content.items).todayLunch.length !== 0 ? JSON.parse(content.items).todayLunch[2].content : ''}}:&nbsp;{{JSON.parse(content.items).todayLunch.length !== 0 ? JSON.parse(content.items).todayLunch[2].value : ''}}</div>
-          <div style="width: 6rem;">{{JSON.parse(content.items).todayLunch.length !== 0 ? JSON.parse(content.items).todayLunch[3].content : ''}}:&nbsp;{{JSON.parse(content.items).todayLunch.length !== 0 ? JSON.parse(content.items).todayLunch[3].value : ''}}</div>
-        </div>
-        <div style="display: flex;color: #4d4d4d;padding-bottom: .5rem">
-          <div style="flex: 1;">{{JSON.parse(content.items).todayLunch.length !== 0 ? JSON.parse(content.items).todayLunch[4].content : ''}}:&nbsp;{{JSON.parse(content.items).todayLunch.length !== 0 ? JSON.parse(content.items).todayLunch[4].value : ''}}</div>
+        <div style="display: flex;color: #4d4d4d;padding-bottom: .5rem;flex-wrap: wrap;">
+          <div style="flex: 1;display: flex;padding-bottom: .5rem" v-for="(item, index) in JSON.parse(content.items).todayLunch" :key="index">
+            <div style="width:4rem;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;display: inline-block">{{item.content}}</div>
+            <div style="flex: 1">:&nbsp;{{item.value}}</div>
+          </div>
         </div>
       </div>
     </div>
     <div style="padding: .5rem 0;text-align: center;color: #4d4d4d;" @click="jump">
-      查看宝宝营养曲线&nbsp;&nbsp;>>
+      查看宝宝本周菜谱&nbsp;&nbsp;>>
     </div>
   </div>
 </template>
@@ -29,7 +24,9 @@
 
   export default {
     data() {
-      return {};
+      return {
+        childId: '',
+      };
     },
     props: ['content'],
     computed: {
@@ -37,13 +34,24 @@
         selectedChildId: state => state.parent.selectedChildId,
       }),
     },
+    created() {
+      console.log(this.content);
+      console.log(JSON.parse(this.content.items));
+    },
     methods: {
       jump() {
+        if (this.selectedChildId) {
+          this.childId = this.selectedChildId;
+        } else if (this.$route.query.childId) {
+          this.childId = this.$route.query.childId;
+        } else {
+          this.childId = this.content.child.id;
+        }
         this.$router.push({
           path: '/day/structure/report',
           query: {
             type: 3,
-            childId: this.selectedChildId ? this.selectedChildId : this.$route.query.childId,
+            childId: parseInt(this.childId, 10),
             classId: this.content.classId,
             reportId: this.content.id,
             time: JSON.parse(this.content.items).detailTime ? JSON.parse(this.content.items).detailTime :

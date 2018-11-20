@@ -14,11 +14,13 @@ const store = new Vuex.Store({
   state: {
     // 通用
     loading: false,
+    postLoading: false,
     ossClient: '',
     uploading: false,
     token: localStorage.getItem('w-token') ? localStorage.getItem('w-token') : '',
     weekLunch: {},
     saveScroll: 0,
+    saveScrollHistory: 0,
     lessonList: [],
     reserveInfo: {},
     playerOptions: {
@@ -76,6 +78,9 @@ const store = new Vuex.Store({
     savePositionScroll(state, payload) {
       state.saveScroll = payload;
     },
+    saveHistoryScroll(state, payload) {
+      state.saveScrollHistory = payload;
+    },
     saveReserveInfo(state, payload) {
       state.reserveInfo = payload;
     },
@@ -107,7 +112,6 @@ const store = new Vuex.Store({
           state.uploading = false;
           const url = result.res.requestUrls[0].slice(0, result.res.requestUrls[0].indexOf('?') > 0 ? result.res.requestUrls[0].indexOf('?') : (result.res.requestUrls[0].length));
           resolve(url);
-          console.log(url);
         }).catch((err) => {
           state.uploading = false;
           Toast('上传图片失败');
@@ -128,6 +132,11 @@ const store = new Vuex.Store({
           Toast('上传视频失败');
           reject(err);
         });
+      });
+    },
+    uploadByOSS({ state }, { fileName, fileRaw }) {
+      return state.ossClient.multipartUpload(fileName, fileRaw).then(result => result.res.requestUrls[0].slice(0, result.res.requestUrls[0].indexOf('?') > 0 ? result.res.requestUrls[0].indexOf('?') : (result.res.requestUrls[0].length))).catch((err) => {
+        Promise.reject(err);
       });
     },
     // 结构列表
@@ -268,20 +277,22 @@ const store = new Vuex.Store({
     getWeekLesson({ state }, UrlVals) {
       return new Promise((resolve, reject) => {
         api.getWeekLesson(UrlVals).then((res) => {
-          const data = [];
-          state.lessonList = [];
-          data.push(JSON.parse(res.obj.monday));
-          data.push(JSON.parse(res.obj.tuesday));
-          data.push(JSON.parse(res.obj.wednesday));
-          data.push(JSON.parse(res.obj.thursday));
-          data.push(JSON.parse(res.obj.friday));
-          data.forEach((item) => {
-            item.forEach((index) => {
-              if (index.time === '10:30-11:00') {
-                state.lessonList.push(index);
-              }
+          if (res.obj) {
+            const data = [];
+            state.lessonList = [];
+            data.push(JSON.parse(res.obj.monday));
+            data.push(JSON.parse(res.obj.tuesday));
+            data.push(JSON.parse(res.obj.wednesday));
+            data.push(JSON.parse(res.obj.thursday));
+            data.push(JSON.parse(res.obj.friday));
+            data.forEach((item) => {
+              item.forEach((index) => {
+                if (index.time === '10:00-10:30') {
+                  state.lessonList.push(index);
+                }
+              });
             });
-          });
+          }
           resolve(res);
         }).catch((err) => {
           console.log(err);
@@ -293,6 +304,25 @@ const store = new Vuex.Store({
     getHistoryReport({ state }, data) {
       return new Promise((resolve, reject) => {
         api.getHistoryReport(data).then((res) => {
+          resolve(res);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    },
+    // 用户调研
+    getStoreInfo({ state }, data) {
+      return new Promise((resolve, reject) => {
+        api.getStoreInfo(data).then((res) => {
+          resolve(res);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    },
+    postSurvey({ state }, data) {
+      return new Promise((resolve, reject) => {
+        api.postSurvey(data).then((res) => {
           resolve(res);
         }).catch((err) => {
           reject(err);

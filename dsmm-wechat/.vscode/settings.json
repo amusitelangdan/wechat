@@ -1,0 +1,28 @@
+{
+    "editor.formatOnSave":false,
+    "editor.formatOnType": true,
+    "standard.run": "onSave",
+    "standard.validate": [
+        "javascript",
+        "javascriptreact",
+        {
+          "language": "html",
+          "autoFix": true
+        },
+        {
+          "language": "vue",
+          "autoFix": true
+        }
+      ],
+    "files.associations": {
+        "*.vue": "vue",
+        "*.cjson": "jsonc",
+        "*.wxss": "css",
+        "*.wxs": "javascript"
+      }, 
+      "eslint.options": {
+        "eslintConfig": "./.eslintrc"
+      },
+    "eslint.autoFixOnSave": true,
+    "eslint.run": "onType",     
+}

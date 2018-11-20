@@ -108,6 +108,7 @@
         imageUrlList: [], // 多张图片url
         deleteImageUrl: '',
         time: '',
+        flag: true,
       };
     },
     components: {
@@ -171,12 +172,17 @@
           time: this.time,
           todayTime: moment().format('dddd'),
         });
-        this.postReport({
-          type: 4,
-          photos: JSON.stringify(this.imageUrlList),
-          items: data,
-          memo: this.memo.replace(/\r\n/g, '\n').replace(/\n/g, '\n').replace(/\s/g, '\n'),
-        });
+        if (this.flag) {
+          this.flag = false;
+          this.postReport({
+            type: 4,
+            photos: JSON.stringify(this.imageUrlList),
+            items: data,
+            memo: this.memo.replace(/\r\n/g, '\n').replace(/\n/g, '\n').replace(/\s/g, '\n'),
+          }).catch(() => {
+            this.flag = true;
+          });
+        }
       },
       // 图片上传
       uploaded(index) {

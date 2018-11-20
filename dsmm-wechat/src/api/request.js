@@ -1,7 +1,6 @@
-import 'babel-polyfill';
 import axios from 'axios';
 import defaultsDeep from 'lodash.defaultsdeep';
-import apiConfig from './config';
+import { apiConfig } from '../config';
 import store from '../store/index';
 import { Toast } from 'mint-ui';
 
@@ -66,12 +65,18 @@ const put = (url, data, config, options) => requestMap(request.put, url, data, c
 // 请求拦截
 request.interceptors.request.use((req) => {
   store.state.loading = true;
+  if (req.method === 'post' || req.method === 'POST') {
+    store.state.postLoading = true;
+  }
   return req;
 }, error => Promise.reject(error));
 
 // 响应拦截
 request.interceptors.response.use((response) => {
   store.state.loading = false;
+  if (response.config.method === 'post' || response.config.method === 'POST') {
+    store.state.postLoading = false;
+  }
   return new Promise((resolve, reject) => {
     if (response.data.code === 200) {
       resolve(response);

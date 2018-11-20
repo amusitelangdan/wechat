@@ -88,7 +88,6 @@
         postReserve: 'postReserve',
       }),
       confirm() {
-        console.log(this.reserveInfo);
         let sexValue = '';
         if (this.reserveInfo.sexValue.toString() === '1') {
           sexValue = '男';
@@ -123,14 +122,12 @@
               this.getPhoneVerificationCode({
                 phoneNumber: this.phone,
               }).then((res) => {
-                // debugger;
                 if (res.code === 200) {
                   clearTimer = setInterval(() => {
                     if (maxTime > 0 && maxTime !== 1) {
                       maxTime -= 1;
                       this.verificationCode = `${maxTime}s后刷新`;
                     } else {
-                      console.log(maxTime);
                       clearInterval(clearTimer);
                       this.verificationCode = '发送验证码';
                       this.start = true;

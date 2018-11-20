@@ -8,7 +8,7 @@
         <temperature class="card-cell" title="体温" v-on:temperature="listenToMyBoy" v-bind:saveInfo="dayCheckInfoList.items.bodyTemperature"></temperature>
         <emotion class="card-cell" :title="emotion" v-on:emotion="emotionalState" v-bind:saveInfo="dayCheckInfoList.items.feeling"></emotion>
         <div>
-          <HandCondition v-on:handCondition="handCondition" v-bind:issDate="dayCheckInfoList.items.headAndMouth"></HandCondition>
+          <HeadAndMouth v-on:handCondition="handCondition" v-bind:issDate="dayCheckInfoList.items.headAndMouth"/>
           <PhysicalCondition v-on:physicalCondition="physicalCondition" v-bind:issDate="dayCheckInfoList.items.bodyCondition"></PhysicalCondition>
           <Fingernail v-on:fingernail="fingernail" v-bind:issDate="dayCheckInfoList.items.nail"></Fingernail>
         </div>
@@ -39,15 +39,15 @@
             </div>
             <div style="overflow: hidden;padding: .5rem 0 0;">
               <div class="timeLeft" style="float: left;margin-right: 1rem">情绪状态:</div>
-              <div v-if="dayCheckInfoList.items.feeling === '开心'" class="color-warning">
+              <div v-if="dayCheckInfoList.items.feeling === '开心' || dayCheckInfoList.items.feeling === '超开心'" class="color-warning">
                 <img :src="require('../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_excietment.png')" alt="" style="width: 1.2rem;height: 1.2rem;display: block;float: left;">
                 <span style="line-height: 1.2rem;font-size: 14px;display: block;float:left;margin-left: .5rem">超开心</span>
               </div>
-              <div v-else-if="dayCheckInfoList.items.feeling === '一般'" class="color-warning">
+              <div v-else-if="dayCheckInfoList.items.feeling === '一般' || dayCheckInfoList.items.feeling === '很正常'" class="color-warning">
                 <img :src="require('../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_general.png')" alt="" style="width: 1.2rem;height: 1.2rem;display: block;float: left;">
                 <span style="line-height: 1.2rem;font-size: 14px;display: block;float:left;margin-left: .5rem">很正常</span>
               </div>
-              <div v-else-if="dayCheckInfoList.items.feeling === '难过'" class="color-warning">
+              <div v-else-if="dayCheckInfoList.items.feeling === '难过' || dayCheckInfoList.items.feeling === '略低落'" class="color-warning">
                 <img :src="require('../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_noHappy.png')" alt="" style="width: 1.2rem;height: 1.2rem;display: block;float: left;">
                 <span style="line-height: 1.2rem;font-size: 14px;display: block;float:left;margin-left: .5rem">略低落</span>
               </div>
@@ -84,12 +84,12 @@
   </div>
 </template>
 <script>
-  import HandCondition from '../../components/report/HandCondition';
   import PhysicalCondition from '../../components/report/PhysicalCondition';
   import Fingernail from '../../components/report/FingernailInfo';
   import Temperature from '../../components/report/InputTemperature';
   import Emotion from '../../components/report/SelectEmotion';
   import ChildInfo from '../../components/layout/ChildInfo';
+  import HeadAndMouth from '../../components/report/HandAndMouth';
   import moment from 'moment';
   import { mapActions, mapState } from 'vuex';
 
@@ -102,6 +102,7 @@
         memo: '', // 备注信息
         // 手口情况和肢体情况
         data: {},
+        flag: true,
       };
     },
     mounted() {
@@ -134,19 +135,30 @@
           time: date, // 发送日期
         });
         localStorage.setItem('checkDetail', this.data);
-        this.postReport({
-          type: 1,
-          items: this.data,
-          memo: this.dayCheckInfoList.memo.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>').replace(/\s/g, ' '),
-        });
-        console.log(this.data);
+        if (this.flag) {
+          this.flag = false;
+          this.postReport({
+            type: 1,
+            items: this.data,
+            memo: this.dayCheckInfoList.memo.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>').replace(/\s/g, ' '),
+          }).catch(() => {
+            this.flag = true;
+          });
+        }
       },
 //        利用$on $emit将温度读取到，将情绪状态获取到
       listenToMyBoy(someData) {
         this.dayCheckInfoList.items.bodyTemperature = someData;
       },
       emotionalState(index) {
-        this.dayCheckInfoList.items.feeling = index;
+        let data = '超开心';
+        if (index === '难过') {
+          data = '略低落';
+        } else if (index === '一般') {
+          data = '很正常';
+        }
+        this.dayCheckInfoList.items.feeling = data;
+        console.log(this.dayCheckInfoList.items.feeling);
       },
       clickToConfirm(value) {
         this.popupVisible = value;
@@ -176,7 +188,6 @@
       init() {
         if (localStorage.getItem('checkDetail')) {
           const checkData = JSON.parse(localStorage.getItem('checkDetail'));
-          console.log(checkData);
           this.dayCheckInfoList.items.bodyTemperature = checkData.bodyTemperature;
           this.dayCheckInfoList.items.headAndMouth = checkData.headAndMouth;
           this.dayCheckInfoList.items.bodyCondition = checkData.bodyCondition;
@@ -192,9 +203,9 @@
       Temperature,
       emotion: Emotion,
       ChildInfo,
-      HandCondition,
       PhysicalCondition,
       Fingernail,
+      HeadAndMouth,
     },
   };
 </script>

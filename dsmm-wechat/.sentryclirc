@@ -1,0 +1,5 @@
+[auth]
+token=85e1132b9850428aaf3779aabdbc124b4b4f8e19b5b14b46b21dbbb70a03e591
+
+[defaults]
+url=http://sentry.daishumm.com

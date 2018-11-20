@@ -132,14 +132,11 @@
           value: '10',
           label: '博山中心',
         }, {
-          value: '11',
-          label: '古北中心',
-        }, {
           value: '12',
           label: '军体中心',
         }, {
           value: '13',
-          label: '秀岩中心',
+          label: '秀沿中心',
         }, {
           value: '14',
           label: '天山中心',

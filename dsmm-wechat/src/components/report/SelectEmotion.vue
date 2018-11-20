@@ -54,11 +54,11 @@
     },
     created() {
       if (this.saveInfo !== undefined) {
-        if (this.saveInfo === '开心') {
+        if (this.saveInfo === '开心' || this.saveInfo === '超开心') {
           this.changeColorOne();
-        } else if (this.saveInfo === '一般') {
+        } else if (this.saveInfo === '一般' || this.saveInfo === '很正常') {
           this.changeColorTwo();
-        } else if (this.saveInfo === '难过') {
+        } else if (this.saveInfo === '难过' || this.saveInfo === '略低落') {
           this.changeColorThree();
         }
       }

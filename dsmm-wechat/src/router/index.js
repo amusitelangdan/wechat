@@ -87,10 +87,20 @@ export default new Router({
       name: '历史报告发送列表',
       meta: {
         requireAuth: true,
-        keepAlive: false,
+        keepAlive: true,
         share: false,
       },
       component: () => import('../views/teacher/historyReportList.vue'),
+    },
+    {
+      path: '/teacher/history/list',
+      name: '历史报告列表',
+      meta: {
+        requireAuth: true,
+        keepAlive: false,
+        share: false,
+      },
+      component: () => import('../views/teacher/historyReportInfoList.vue'),
     },
     {
       path: '/teacher/dayCheck/sendDetail',
@@ -160,6 +170,141 @@ export default new Router({
         share: false,
       },
       component: () => import('../views/teacher/sendCustomizeDetail.vue'),
+    },
+    // 老师个人中心
+    {
+      path: '/teacher/personal',
+      name: '个人信息',
+      meta: {
+        requireAuth: true,
+        keepAlive: false,
+        share: false,
+      },
+      component: () => import('../views/teacher/personal/index.vue'),
+    },
+    {
+      path: '/teacher/personal/phone',
+      name: '修改号码',
+      meta: {
+        requireAuth: true,
+        keepAlive: false,
+        share: false,
+      },
+      component: () => import('../views/teacher/personal/changePhone.vue'),
+    },
+    // 老师--我的好评
+    {
+      path: '/teacher/praise',
+      name: '我的好评',
+      meta: {
+        requireAuth: true,
+        keepAlive: false,
+        share: false,
+      },
+      component: () => import('../views/teacher/praise/index.vue'),
+    },
+    {
+      path: '/teacher/add/praise',
+      name: '添加好评',
+      meta: {
+        requireAuth: true,
+        keepAlive: false,
+        share: false,
+      },
+      component: () => import('../views/teacher/praise/add.vue'),
+    },
+    {
+      path: '/teacher/praise/commit',
+      name: '提交成功',
+      meta: {
+        requireAuth: true,
+        keepAlive: false,
+        share: false,
+      },
+      component: () => import('../views/teacher/praise/commitSuccess.vue'),
+    },
+    {
+      path: '/teacher/praise/detail',
+      name: '好评详情',
+      meta: {
+        requireAuth: true,
+        keepAlive: false,
+        share: false,
+      },
+      component: () => import('../views/teacher/praise/detail.vue'),
+    },
+    // 我的评分
+    {
+      path: '/teacher/scoreList',
+      name: '我的评分',
+      meta: {
+        requireAuth: true,
+        keepAlive: false,
+        share: false,
+      },
+      component: () => import('../views/teacher/score/scoreList.vue'),
+    },
+    {
+      path: '/teacher/scoreDetail',
+      name: '评分详情',
+      meta: {
+        requireAuth: true,
+        keepAlive: false,
+        share: false,
+      },
+      component: () => import('../views/teacher/score/scoreDetail.vue'),
+    },
+    // 续费跟进
+    {
+      path: '/teacher/renewalList',
+      name: '续费跟进',
+      meta: {
+        requireAuth: true,
+        keepAlive: false,
+        share: false,
+      },
+      component: () => import('../views/teacher/renewal/renewalList.vue'),
+    },
+    {
+      path: '/teacher/renewalDetail',
+      name: '续费跟进详情页',
+      meta: {
+        requireAuth: true,
+        keepAlive: false,
+        share: false,
+      },
+      component: () => import('../views/teacher/renewal/renewalDetail.vue'),
+    },
+    {
+      path: '/teacher/add/renewal',
+      name: '添加续费跟进',
+      meta: {
+        requireAuth: true,
+        keepAlive: false,
+        share: false,
+      },
+      component: () => import('../views/teacher/renewal/add.vue'),
+    },
+    // 用户调研
+    {
+      path: '/research/index',
+      name: '用户调研',
+      meta: {
+        requireAuth: true,
+        keepAlive: false,
+        share: false,
+      },
+      component: () => import('../views/research/index.vue'),
+    },
+    {
+      path: '/research/success',
+      name: '用户提交成功',
+      meta: {
+        requireAuth: true,
+        keepAlive: false,
+        share: false,
+      },
+      component: () => import('../views/research/submitSuccess.vue'),
     },
     // 家长端
     {

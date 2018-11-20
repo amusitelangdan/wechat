@@ -28,7 +28,7 @@ line-height: 65px; padding: 0 1rem; border-radius: 0 0.4rem 0.4rem 0" @success="
 </template>
 
 <script>
-  import config from '../../api/config';
+  import { apiConfig as config } from '../../config';
 
   export default {
     data() {
