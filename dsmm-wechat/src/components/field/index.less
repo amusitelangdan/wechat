@@ -1,0 +1,32 @@
+
+.mint-cell{
+    background-image: inherit;
+    background-image: inherit;
+    background-size: inherit;
+    background-repeat: inherit;
+    background-position: inherit;
+    .mint-cell-wrapper{
+        position: relative;
+        background-size: 120% 0px;
+    }
+    .mint-cell-wrapper::after{
+        content: '';
+        position: absolute;
+        background-image: linear-gradient(180deg, #d9d9d9, #d9d9d9 50%, transparent 50%);
+        background-size: 120% 1px;
+        background-repeat: no-repeat;
+        background-position: bottom;
+        background-origin: content-box;
+        font-size: 16px;
+        line-height: 1;
+        bottom: 0px;
+        height: 1px;
+        overflow: hidden;
+        padding: 0 10px;
+        width: 100%;
+    }
+}
+
+.mint-field.is-textarea{
+    border-radius:5px; 
+}

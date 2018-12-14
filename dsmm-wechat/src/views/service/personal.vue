@@ -8,7 +8,7 @@
           <div v-if="child.id === selectChildId">
             <div style="width: 80px;height: 80px;border-radius: 80px;background: rgba(255,255,255,0.6);margin: 4rem auto 0;position: relative;overflow:hidden;">
               <!--<img v-if="child.photo" :src="child.photo" style="width: 65px; vertical-align: middle;left: 50%; top: 50%; position: absolute; transform: translate(-50%,-50%);overflow:hidden;border-radius: 100%">-->
-              <img v-if="!child.photo" :src="require('../../assets/img/icon/defaultAvatar/defaultAvatar.png')" style="width: 65px; vertical-align: middle;left: 50%; top: 50%; position: absolute; transform: translate(-50%,-50%)">
+              <img v-if="!child.photo" :src="require('../../assets/img/img/avatar/defaultAvatar.png')" style="width: 65px; vertical-align: middle;left: 50%; top: 50%; position: absolute; transform: translate(-50%,-50%)">
               <div v-if="child.photo" :style="{backgroundImage: `url(${child.photo})`,backgroundRepeat: 'no-repeat',backgroundSize: 'cover'}" style="width: 70px;height:70px;left: 50%; top: 50%; position: absolute; transform: translate(-50%,-50%);border-radius: 100%;"></div>
             </div>
             <div style="text-align:center;margin: .6rem auto 0;color: #ffffff;">
@@ -39,33 +39,43 @@
         </el-row>
       </div>
     </div>
-    <div class="card" style="margin: .5rem 0;">
-      <div class="card-cell_link" @click="toPath('/service/phoneBook', { childId: selectChildId })">
-        学校通讯录
-      </div>
-    </div>
-    <div class="card" style="margin: .5rem 0;">
-      <div class="card-cell_link" @click="toPath('/parent/list', { childId: selectChildId })" style="overflow:hidden;">
-        <el-col :span="12">宝宝家人</el-col>
-        <el-col :span="12" style="text-align: center;color: #898989;font-size: 12px">点击邀请家人朋友</el-col>
-      </div>
-      <div class="card-cell_link" @click="toPath('/service/notice', { childId: selectChildId })">
-        入园须知
-      </div>
-    </div>
-    <div class="card" style="margin: .5rem 0;">
-      <div class="card-cell_link" @click="toPath('/service/feedback', { childId: selectChildId })">
-        建议反馈
-      </div>
-      <div class="card-cell_link" @click="toPath('/service/complaint', { childId: selectChildId })">
-        投诉举报
-      </div>
-    </div>
-    <div class="card" style="margin: 0;">
-      <div class="card-cell" @click="logout">
-        退出登录
-      </div>
-    </div>
+    <dw-around-card style="margin-top: 10px">
+      <dw-setting-show  @click.native="toPath('/service/phoneBook', { childId: selectChildId })" slot="housing-content">
+        <div slot="left" class="layout-row-left">学校通讯录</div>
+        <div slot="right" class="layout-row-right">
+          <i class="iconfont icon-angle-right"></i></div>
+      </dw-setting-show>
+    </dw-around-card>
+    <dw-around-card style="margin-top: 5px">
+      <dw-setting-show  @click.native="toPath('/parent/list', { childId: selectChildId })" slot="housing-content" class="border-b">
+        <div slot="left" class="layout-row-left">宝宝家人</div>
+        <div slot="right" class="layout-row-right">
+          <span style="font-size: 12px">点击邀请家人朋友</span>
+          <i class="iconfont icon-angle-right"></i></div>
+      </dw-setting-show>
+      <dw-setting-show @click.native="toPath('/service/notice', { childId: selectChildId })" slot="housing-content">
+        <div slot="left" class="layout-row-left">入园须知</div>
+        <div slot="right" class="layout-row-right">
+          <i class="iconfont icon-angle-right"></i></div>
+      </dw-setting-show>
+    </dw-around-card>
+    <dw-around-card style="margin-top: 5px">
+      <dw-setting-show  @click.native="toPath('/service/feedback', { childId: selectChildId })" slot="housing-content" class="border-b">
+        <div slot="left" class="layout-row-left">建议反馈</div>
+        <div slot="right" class="layout-row-right">
+          <i class="iconfont icon-angle-right"></i></div>
+      </dw-setting-show>
+      <dw-setting-show @click.native="toPath('/service/complaint', { childId: selectChildId })" slot="housing-content">
+        <div slot="left" class="layout-row-left">投诉举报</div>
+        <div slot="right" class="layout-row-right">
+          <i class="iconfont icon-angle-right"></i></div>
+      </dw-setting-show>
+    </dw-around-card>
+    <dw-around-card style="margin-top: 5px">
+      <dw-setting-show  @click.native="logout" slot="housing-content">
+        <div slot="left" class="layout-row-left">退出登录</div>
+      </dw-setting-show>
+    </dw-around-card>
   </div>
 </template>
 <script>
@@ -73,6 +83,8 @@
   import Confirmation from '../../components/button/PopUpConfirmation';
   import HeadInfo from '../../components/layout/ChildInfo';
   import { Toast } from 'mint-ui';
+  import DwSettingShow from '../../components/layout/base/Row';
+  import DwAroundCard from '../../components/layout/base/Card';
 
   export default {
     data() {
@@ -83,6 +95,8 @@
     components: {
       Confirmation,
       HeadInfo,
+      DwSettingShow,
+      DwAroundCard,
     },
     computed: {
       ...mapState({
@@ -135,7 +149,7 @@
   .bg{
     width: 100%;
     height: 14rem;
-    background-image: url(../../assets/img/icon/personal/background-Image.png);
+    background-image: url(../../assets/img/img/page/background-Image.png);
     margin-bottom: .8rem;
   }
   .background-blur{

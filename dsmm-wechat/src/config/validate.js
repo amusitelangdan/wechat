@@ -23,6 +23,9 @@ export default {
   evaluateTime: [
     isRequired('请设置好评时间'),
   ],
+  memo: [
+    isRequired('请输入备注信息'),
+  ],
   evaluatePhotos: [
     {
       type: 'function',

@@ -1,17 +1,18 @@
 <template>
   <div>
-    <div class="card layout border-b" @touchstart="openSelect(1)" @touchend="Select(1)" @touchmove="moveSelect" :class="{changeBackground: change === 1}">
+    <div class="card layout border-b" @click="Select(1)" :class="{changeBackground: change === 1}">
+      <!--@touchmove="moveSelect"-->
       <div class="praiseType">请选择好评类型</div>
       <div class="type"><span>{{submitData.praise}}</span><span v-if="!submitData.praise">锦旗</span></div>
-      <div class="praiseTypeRight">></div>
+      <div class="praiseTypeRight"><i class="iconfont icon-angle-right"></i></div>
     </div>
-    <div class="card layout border-b" @touchstart="openSelect(2)" @touchend="Select(2)" @touchmove="moveSelect" :class="{changeBackground: change === 2}">
+    <div class="card layout border-b" @click="Select(2)" :class="{changeBackground: change === 2}">
       <div class="praiseType">收到好评时间</div>
       <div class="type">
-        <span v-if="pickerPraiseTypeTime">{{submitData.praiseTypeTime}}</span>
-        <span v-if="!pickerPraiseTypeTime">时间</span>
+        <span v-if="submitData.praiseTypeTime">{{submitData.praiseTypeTime}}</span>
+        <span v-if="!submitData.praiseTypeTime">时间</span>
       </div>
-      <div class="praiseTypeRight">></div>
+      <div class="praiseTypeRight"><i class="iconfont icon-angle-right"></i></div>
     </div>
     <div class="card" style="margin: 0;">
       <div class="card-cell" style="border: 0;">添加图片</div>
@@ -31,6 +32,7 @@
     <mt-datetime-picker
       ref="pickerTime"
       type="date"
+      :startDate="startDate"
       v-model="pickerPraiseTypeTime" @confirm="changePickerPraiseTypeTime">
     </mt-datetime-picker>
   </div>
@@ -60,6 +62,8 @@
         change: '',
         pickerPraiseTypeTime: '',
         imgUrl: '',
+        flag: true,
+        startDate: new Date('2018-01-01'),
         submitData: {
           type: '',
           memo: '',
@@ -80,6 +84,7 @@
       },
       ...mapState({
         evaluationList: state => state.teacher.evaluationList,
+        teacherSelectedClassId: state => state.teacher.teacherSelectedClassId,
       }),
     },
     components: {
@@ -151,17 +156,22 @@
           this.$toast(list[0].errorMessage);
           return;
         }
-        this.getEvaluationAdd({
-          type: this.submitData.type,
-          photos: JSON.stringify(this.submitData.imageUrlList),
-          memo: this.submitData.memo,
-          evaluationDate: this.submitData.praiseTypeTime,
-        }).then(() => {
-          this.$toast('提交成功');
-          setTimeout(() => {
-            this.$router.push('/teacher/praise/commit');
-          }, 1000);
-        });
+        if (this.flag) {
+          this.flag = false;
+          this.getEvaluationAdd({
+            type: this.submitData.type,
+            photos: JSON.stringify(this.submitData.imageUrlList),
+            memo: this.submitData.memo,
+            evaluationDate: this.submitData.praiseTypeTime,
+            classId: this.teacherSelectedClassId,
+          }).then(() => {
+            setTimeout(() => {
+              this.$router.push('/teacher/praise/commit');
+            }, 500);
+          }).catch(() => {
+            this.flag = true;
+          });
+        }
       },
     },
     mounted() {
@@ -208,5 +218,8 @@
     display: flex;
     flex-wrap: wrap;
     padding: 0 0 1rem;
+  }
+  i.icon-angle-right{
+    font-size: 14px;
   }
 </style>

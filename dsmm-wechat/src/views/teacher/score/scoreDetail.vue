@@ -33,17 +33,17 @@
         </div>
       </div>
     </div>
-    <div class="card" style="margin: 0;"  v-if="scoreDetails.memoList">
+    <div class="card" style="margin: 0;"  v-if="scoreDetails.memoList && scoreDetails.memoList.length !== 0">
       <div style="padding: .5rem 0 0;font-weight: bold">当月所有家长匿名建议</div>
       <div>
         <div class="card-cell" v-for="(suggest, index) in scoreDetails.memoList" :key="index">
-          {{suggest}}
+          {{suggest !== '' ? suggest : '无'}}
         </div>
       </div>
     </div>
-    <div v-else>
+    <div v-if="scoreDetails.memoList && scoreDetails.memoList.length === 0">
       <div  style="overflow:hidden;">
-        <img src="../../../assets/img/icon/sendDetailComponents/kongyemian.png" alt="" style="width: 15rem;margin: 3rem auto 1rem;display: block;">
+        <img src="../../../assets/img/img/page/kongyemian.png" alt="" style="width: 15rem;margin: 3rem auto 1rem;display: block;">
         <div style="color: #999999;text-align: center">本月无家长匿名建议</div>
       </div>
     </div>
@@ -115,14 +115,13 @@
   .layout-quality{
     display: flex;
     background-color: #fff;
-    padding: 1rem 0;
+    padding: 10px 0;
     margin-bottom: 5px;
     div{
       flex: 1;
       text-align: center;
-      padding-bottom: .5rem;
+      padding-top: .5rem;
       div:first-child {
-        font-weight: bold;
         color: #1a1a1a;
       }
       div:last-child {
@@ -138,7 +137,7 @@
     }
   }
   .layout-small{
-    padding: .5rem 0;
+    padding: 6px 0;
   }
   .card-cell {
     color: #797979;
