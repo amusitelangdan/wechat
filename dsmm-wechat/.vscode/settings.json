@@ -24,5 +24,7 @@
         "eslintConfig": "./.eslintrc"
       },
     "eslint.autoFixOnSave": true,
-    "eslint.run": "onType",     
+    "eslint.run": "onType",
+    "vsicons.presets.angular": true,
+    
 }

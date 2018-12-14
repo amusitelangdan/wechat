@@ -3,6 +3,7 @@ import defaultsDeep from 'lodash.defaultsdeep';
 import { apiConfig } from '../config';
 import store from '../store/index';
 import { Toast } from 'mint-ui';
+// import router from '../router/index';
 
 // 获取及配置header
 const getTokenHeader = (needToken) => {
@@ -78,8 +79,12 @@ request.interceptors.response.use((response) => {
     store.state.postLoading = false;
   }
   return new Promise((resolve, reject) => {
-    if (response.data.code === 200) {
+    if (response.data.code.toString() === '200') {
       resolve(response);
+    } else if (response.data.code.toString() === '403') {
+      localStorage.removeItem('w-token');
+      // Toast(response.data.msg);
+      reject(response);
     } else {
       Toast(response.data.msg);
       reject(response);

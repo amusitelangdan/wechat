@@ -518,6 +518,39 @@ input[type='number'] {
   padding: .8rem 0;
   font-weight: bolder;
 }
+#score1 .el-slider__runway {
+  margin: 8px 0;
+  background-color: #FFECCC;
+  border: 1px #FFECCC solid;
+}
+#score1 .el-slider__runway .el-slider__stop {
+  background-color: #fff;
+  width: 5px;
+  height: 5px;
+  margin-top: 1px;
+}
+#score2 .el-slider__runway {
+  margin: 8px 0;
+  background-color: #FFECCC;
+  border: 1px #FFECCC solid;
+}
+#score2 .el-slider__runway .el-slider__stop {
+  background-color: #fff;
+  width: 5px;
+  height: 5px;
+  margin-top: 1px;
+}
+#score3 .el-slider__runway {
+  margin: 8px 0;
+  background-color: #FFECCC;
+  border: 1px #FFECCC solid;
+}
+#score3 .el-slider__runway .el-slider__stop {
+  background-color: #fff;
+  width: 5px;
+  height: 5px;
+  margin-top: 1px;
+}
 .fix-border {
   padding: 1rem 0;
   border-bottom: 1px #e3e4e6 solid;
@@ -536,6 +569,12 @@ input[type='number'] {
 }
 .el-select .el-input__inner:focus {
   border-color: #F5A626;
+}
+.layout-row-left {
+  padding-left: 11px;
+}
+.layout-row-right {
+  padding-right: 11px;
 }
 .video-js .vjs-tech {
   left: 50%;

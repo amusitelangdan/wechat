@@ -19,7 +19,7 @@
       <div id="myChartTwo" :style="{height: '200px', width: '100%'}"></div>
     </div>
     <div style="margin-top: 3rem">
-    <img :src="require('../../assets/img/icon/sendReport/QRcode.png')" alt="" style="width: 10rem;height: 10rem;margin: 0 auto;display: block">
+    <img :src="require('../../assets/img/img/sendReport/QRcode.png')" alt="" style="width: 10rem;height: 10rem;margin: 0 auto;display: block">
     <div style="padding: 1rem 0 2rem;text-align: center;font-size: 12px">长按识别二维码&nbsp;&nbsp;&nbsp;&nbsp;关注袋鼠麻麻</div>
     </div>
   </div>

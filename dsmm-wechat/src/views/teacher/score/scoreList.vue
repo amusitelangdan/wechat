@@ -1,47 +1,53 @@
 <template>
-  <div>
-    <div class="card-head">
-      <div class="history">历史评分</div>
-    </div>
-    <div class="card" style="overflow:hidden;" v-for="(score, index) in scoreList" :key="index" @touchstart="openDetail(index)" @touchend="detail(score)" @touchmove="moveDetail" :class="{changeBackground: change === index}">
-      <div class="list-left">
-        <div>{{score.year}}年{{score.month}}月</div>
-        <div>我的评分</div>
+  <div style="overflow:hidden;">
+    <div v-if="scoreList && scoreList.length !== 0" key="score">
+      <div class="banner">
+        <img src="../../../assets/img/img/scoreList.png" alt="">
       </div>
-      <div class="list-right">
-        <span class="layout-fraction">{{Number.isInteger(parseFloat(score.avgScore)) ? parseFloat(score.avgScore) : parseFloat(score.avgScore).toFixed(1)}}</span>
-        <span style="font-size: 12px">分</span>
+      <div class="card layout-changeBackground" style="overflow:hidden;" v-for="(score, index) in scoreList" :key="index" @touchstart="openDetail(index)" @touchend="detail(score)" @touchmove="moveDetail">
+        <div class="list-left">
+          <div>{{score.year}}年{{score.month}}月</div>
+          <div>我的评分</div>
+        </div>
+        <div class="list-right">
+          <span class="layout-fraction">{{Number.isInteger(parseFloat(score.avgScore)) ? parseFloat(score.avgScore) : parseFloat(score.avgScore).toFixed(1)}}</span>
+          <span style="font-size: 12px">分</span>
+          <i class="iconfont icon-angle-right" style="color: #D8D8D8;"></i>
+        </div>
       </div>
+      <div class="load">已加载全部</div>
     </div>
-    <div class="load">已加载全部</div>
+    <blank v-else-if="scoreList && scoreList.length === 0" key="score" text="目前暂无评分记录~"></blank>
   </div>
 </template>
 <script>
   import { mapActions } from 'vuex';
+  import Blank from '../../../components/layout/Blank';
 
   export default {
     data() {
       return {
         scoreList: [],
-        touchDetail: true,
+        touchDetail: false,
         change: '',
       };
     },
     computed: {
     },
+    components: {
+      Blank,
+    },
     methods: {
       ...mapActions({
         getScoreList: 'teacher/getScoreList',
       }),
-      openDetail(index) {
-        this.change = index;
+      openDetail() {
         this.touchDetail = true;
       },
       moveDetail() {
         this.touchDetail = false;
       },
       detail(score) {
-        this.change = '';
         if (this.touchDetail) {
           this.$router.push({
             path: '/teacher/scoreDetail',
@@ -65,6 +71,13 @@
   };
 </script>
 <style lang="less" scoped>
+  .banner{
+    margin: 5px;
+    img{
+      width: 100%;
+      height: 100%;
+    }
+  }
   .card-head{
     padding: 1rem;
     display: flex;
@@ -105,8 +118,8 @@
   .card{
     margin: 0 0 .5rem;
   }
-  .changeBackground{
-    background: rgba(0,0,0,0.1);
+  .layout-changeBackground:active{
+    background: rgba(0,0,0,0.05);
   }
   .load{
     padding: 1rem 0;

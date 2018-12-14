@@ -30,12 +30,18 @@
     },
     computed: {
       ...mapState({
+        token: state => state.token,
       }),
       ...mapGetters([
       ]),
     },
     watch: {
       $route(to, from) {
+      },
+      token: (val) => {
+        if (!val) {
+          this.$router.go(0);
+        }
       },
     },
     methods: {

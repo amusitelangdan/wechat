@@ -1,30 +1,36 @@
 <template>
   <div>
-    <div class="layout-expired" v-if="expired" style="display: flex;">
-      <div style="width: 40%;overflow:hidden;">
-        <div style="width: 16px;height: 16px;background-repeat: no-repeat;background-size: cover;margin-right: .5rem;float: right" :style="{backgroundImage: `url(${require('../../assets/img/icon/defaultAvatar/error.png')})`}"></div>
+    <!--<div class="layout-expired card-head" v-if="expired">-->
+      <!--<div style="display: inline-flex;min-width: 100px;max-width: 210px;margin: 0 auto">-->
+        <!--<span style="width: 16px;height: 16px;background-repeat: no-repeat;background-size: cover;margin-right: .5rem;float: right" :style="{backgroundImage: `url(${require('../../assets/img/icon/defaultAvatar/error.png')})`}"></span>-->
+        <!--<span>调研已过期</span>-->
+      <!--</div>-->
+    <!--</div>-->
+    <div class="layout-expired card-head" v-if="repeat">
+      <div style="display: inline-flex;min-width: 100px;max-width: 210px;margin: 0 auto">
+        <span style="width: 16px;height: 16px;background-repeat: no-repeat;background-size: cover;margin-right: .5rem;float: right" :style="{backgroundImage: `url(${require('../../assets/img/icon/defaultAvatar/error.png')})`}"></span>
+        <span>您已提交过了，请勿重复提交</span>
       </div>
-      <div style="flex: 1;text-align: left">该调研已过期</div>
     </div>
     <div>
-      <img src="../../assets/img/icon/month/1.png" alt="" style="width: 100%" v-if="month.toString() === '1'">
-      <img src="../../assets/img/icon/month/2.png" alt="" style="width: 100%" v-if="month.toString() === '2'">
-      <img src="../../assets/img/icon/month/3.png" alt="" style="width: 100%" v-if="month.toString() === '3'">
-      <img src="../../assets/img/icon/month/4.png" alt="" style="width: 100%" v-if="month.toString() === '4'">
-      <img src="../../assets/img/icon/month/5.png" alt="" style="width: 100%" v-if="month.toString() === '5'">
-      <img src="../../assets/img/icon/month/6.png" alt="" style="width: 100%" v-if="month.toString() === '6'">
-      <img src="../../assets/img/icon/month/7.png" alt="" style="width: 100%" v-if="month.toString() === '7'">
-      <img src="../../assets/img/icon/month/8.png" alt="" style="width: 100%" v-if="month.toString() === '8'">
-      <img src="../../assets/img/icon/month/9.png" alt="" style="width: 100%" v-if="month.toString() === '9'">
-      <img src="../../assets/img/icon/month/10.png" alt="" style="width: 100%" v-if="month.toString() === '10'">
-      <img src="../../assets/img/icon/month/11.png" alt="" style="width: 100%" v-if="month.toString() === '11'">
-      <img src="../../assets/img/icon/month/12.png" alt="" style="width: 100%" v-if="month.toString() === '12'">
+      <img src="../../assets/img/img/month/1.png" alt="" style="width: 100%" v-if="month.toString() === '1'">
+      <img src="../../assets/img/img/month/2.png" alt="" style="width: 100%" v-if="month.toString() === '2'">
+      <img src="../../assets/img/img/month/3.png" alt="" style="width: 100%" v-if="month.toString() === '3'">
+      <img src="../../assets/img/img/month/4.png" alt="" style="width: 100%" v-if="month.toString() === '4'">
+      <img src="../../assets/img/img/month/5.png" alt="" style="width: 100%" v-if="month.toString() === '5'">
+      <img src="../../assets/img/img/month/6.png" alt="" style="width: 100%" v-if="month.toString() === '6'">
+      <img src="../../assets/img/img/month/7.png" alt="" style="width: 100%" v-if="month.toString() === '7'">
+      <img src="../../assets/img/img/month/8.png" alt="" style="width: 100%" v-if="month.toString() === '8'">
+      <img src="../../assets/img/img/month/9.png" alt="" style="width: 100%" v-if="month.toString() === '9'">
+      <img src="../../assets/img/img/month/10.png" alt="" style="width: 100%" v-if="month.toString() === '10'">
+      <img src="../../assets/img/img/month/11.png" alt="" style="width: 100%" v-if="month.toString() === '11'">
+      <img src="../../assets/img/img/month/12.png" alt="" style="width: 100%" v-if="month.toString() === '12'">
     </div>
-    <div class="card teacherScore">老师评分</div>
+    <div class="card teacherScore" style="margin-top: 10px">老师评分</div>
     <div v-for="(item, index) in staffList" :key="index">
       <div class="card border-b teacherNav">
         <div class="avatar" v-if="item.photo" :style="{backgroundImage: `url(${item.photo})`}" style="background-repeat: no-repeat;background-size: cover"></div>
-        <div class="avatar" v-else :style="{backgroundImage: `url(${require('../../assets/img/icon/defaultAvatar/teacher_default_avator.png')})`}" style="background-repeat: no-repeat;background-size: cover"></div>
+        <div class="avatar" v-else :style="{backgroundImage: `url(${require('../../assets/img/img/avatar/teacher_default_avator.png')})`}" style="background-repeat: no-repeat;background-size: cover"></div>
         <div class="teacherName">
           <div>{{item.name}}</div>
           <div>{{item.staffType.name}}</div>
@@ -111,10 +117,11 @@
         </div>
       </div>
     </div>
-    <div  class="button-block_primary" @click="sureSubmit" v-if="!expired">
+    <!--v-if="!expired && repeat === false"-->
+    <div  class="button-block_primary" @click="sureSubmit" v-if="!repeat">
       匿名提交
     </div>
-    <div  class="button-block_primary" style="background: #D9D9D9" v-if="expired">
+    <div  class="button-block_primary" style="background: #D9D9D9" v-if="repeat">
       匿名提交
     </div>
   </div>
@@ -129,6 +136,7 @@
         storeId: '',
         staffId: [],
         expired: true,
+        repeat: false,
         month: '',
         staffList: [],
         store: {},
@@ -172,7 +180,6 @@
           }).then(() => {
             this.$router.replace('/research/success');
           }).catch(() => {
-            this.$toast('提交失败，请重新提交');
             this.flag = true;
           });
         }
@@ -187,7 +194,12 @@
         this.getStoreInfo({
           storeId: this.storeId,
           staffIds: r1.join(','),
+          childId: this.childId,
         }).then((res) => {
+          console.log(res);
+          if (res.obj.submitted) {
+            this.repeat = true;
+          }
           res.obj.staffList.forEach((item) => {
             item.value1 = 0;
             item.value2 = 0;
@@ -205,10 +217,7 @@
         this.$toast('缺少必须参数');
       }
       this.month = moment().subtract(1, 'months').format('MM');
-      const startMonth = moment().startOf('month').format('YYYY-MM-DD');
-      if (Math.abs(moment('2018-11-01').diff(startMonth, 'days')) < 5) {
-        this.expired = false;
-      }
+      // const startMonth = moment().startOf('month').format('YYYY-MM-DD');
     },
   };
 </script>
@@ -290,5 +299,8 @@
     margin-bottom: .5rem;
     background: #999999;
     color: #fff;
+  }
+  .card-head{
+    padding: 1.5rem 3rem;
   }
 </style>

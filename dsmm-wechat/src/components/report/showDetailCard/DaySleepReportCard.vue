@@ -2,7 +2,7 @@
   <div  class="card-round" style="margin-top: .9rem">
     <div class="card-cell border-b layout-new">
       <div class="card-left">
-        <img src="../../../assets/img/icon/parentIndex/parent_sleep_logo.png" alt="">
+        <i class="iconfont icon-baby_sleep icon-icon"></i>
       </div>
       <div style="flex: 1;">
         <div class="title" style="color: #488cc9;">午睡公告</div>
@@ -91,6 +91,7 @@
   .card-left{
     width: 5rem;
     padding: 3.5rem 1.5rem 0 0.5rem;
+    text-align: center;
     img{
       width: 4rem;
       height: 4rem;
@@ -106,5 +107,10 @@
       font-size: 16px;
       padding: 1.3rem 0 1.1rem;
     }
+  }
+  i.icon-icon{
+    font-size: 56px;
+    line-height: normal;
+    color: #488dc9;
   }
 </style>

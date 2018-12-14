@@ -2,7 +2,7 @@
   <div class="card-round" style="margin-top: .9rem">
     <div class="card-cell border-b layout-new">
       <div class="card-left">
-        <img src="../../../assets/img/icon/parentIndex/parent_lunch_logo.png" alt="">
+        <i class="iconfont icon-baby_lunch icon-icon"></i>
       </div>
       <div style="flex: 1;">
         <div class="title" style="color: #ffac28;">今日午餐</div>
@@ -35,8 +35,6 @@
       }),
     },
     created() {
-      console.log(this.content);
-      console.log(JSON.parse(this.content.items));
     },
     methods: {
       jump() {
@@ -89,6 +87,7 @@
   }
   .card-left{
     width: 5rem;
+    text-align: center;
     padding: 3.5rem 1.5rem 0 0.5rem;
     img{
       width: 4rem;
@@ -105,5 +104,10 @@
       font-size: 16px;
       padding: 1.3rem 0 1.1rem;
     }
+  }
+  i.icon-icon{
+    font-size: 56px;
+    line-height: normal;
+    color: #F5A626;
   }
 </style>

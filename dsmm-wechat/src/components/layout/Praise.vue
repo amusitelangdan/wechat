@@ -5,14 +5,14 @@
         <div>{{praise[0].year}}年{{praise[0].month}}月</div>
       </div>
       <div v-if="praise[0].status">
-        <div class="expand card border-t nav" v-for="(item, line) in praise" :key="line" @touchstart="openReview(line)" @touchend="review(item)" @touchmove="moveReview" :class="{changeBackground: change === line}">
-          <div v-if="item.status.toString() === '10' || item.status.toString() === '15'" class="circle" style="background: #F5A626"></div>
-          <div v-if="item.status.toString() === '20'" class="circle" style="background: #1DB562"></div>
-          <div v-if="item.status.toString() === '30'" class="circle" style="background: #FF5024"></div>
+        <div class="expand card border-t nav changeCard" v-for="(item, line) in praise" :key="line" @touchstart="openReview(line)" @touchend="review(item)" @touchmove="moveReview">
+          <div v-if="item.status === 10 || item.status === 15" class="circle" style="background: #F5A626"></div>
+          <div v-if="item.status === 20" class="circle" style="background: #1DB562"></div>
+          <div v-if="item.status === 30" class="circle" style="background: #FF5024"></div>
           <div class="time">{{item.create_time}}</div>
-          <div class="status reviewSuccess" v-if="item.status.toString() === '20'">审核通过</div>
-          <div class="status reviewing" v-if="item.status.toString() === '10' || item.status.toString() === '15'">审核中</div>
-          <div class="status reviewFail" v-if="item.status.toString() === '30'">审核未通过</div>
+          <div class="status reviewSuccess" v-if="item.status === 20">审核通过</div>
+          <div class="status reviewing" v-if="item.status === 10 || item.status === 15">审核中</div>
+          <div class="status reviewFail" v-if="item.status === 30">审核未通过</div>
         </div>
       </div>
       <div class="border-t" v-else>
@@ -43,14 +43,12 @@
         * event.currentTarget : 事件绑定的位置
         * event.target : 实际触发的位置
         * */
-        this.change = line;
         this.touchPraise = true;
       },
       moveReview() {
         this.touchPraise = false;
       },
       review(item) {
-        this.change = '';
         if (this.touchPraise) {
           this.$router.push({
             path: '/teacher/praise/detail',
@@ -83,6 +81,9 @@
     .status{
       text-align: right;
     }
+  }
+  .changeCard:active{
+    background-color: rgba(0,0,0,0.05);
   }
   .head{
     font-size: 12px;

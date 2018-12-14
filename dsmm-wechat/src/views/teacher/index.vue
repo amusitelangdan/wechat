@@ -1,193 +1,65 @@
 <template>
   <div>
     <!--班级及老师信息-->
-    <div class="card" style="padding-top: 1rem; padding-bottom: 1rem">
+    <div class="card box-head">
       <el-row type="flex" align="middle">
         <el-col :span="16">
-          <div style="margin-bottom: 1rem;"><img src="../../assets/img/icon/teacherIndex/store.png" style="width: 20px; margin-right: 0.5rem; vertical-align: middle">{{storeName}}</div>
+          <div style="margin-bottom: 1rem;">
+            <dw-store-and-class-reveal v-bind:name="storeName" v-bind:type="0"></dw-store-and-class-reveal>
+          </div>
           <el-col :span="16">
-            <div><img src="../../assets/img/icon/teacherIndex/class.png" style="width: 20px; margin-right: 0.5rem; vertical-align: middle">{{className}}</div>
+            <div>
+              <dw-store-and-class-reveal v-bind:name="className" v-bind:type="1"></dw-store-and-class-reveal>
+            </div>
           </el-col>
           <el-col :span="8" style="text-align: center">
             <span style="font-size: 12px; margin-right: 1rem" @click="classSelect">[切换班级]</span>
           </el-col>
         </el-col>
-        <el-col :span="8" class="border-l" @touchstart.native="startPersonal" @touchmove.native="movePersonal" @touchend.native="personal" :class="{changeBackground: changeTouch}">
-          <div v-if="tokenTeacherInfo.photo"  style="width: 50px;height: 50px; display: block; border-radius: 50%; margin: auto; overflow: hidden; position: relative;background-repeat: no-repeat;background-size: cover" :style="{backgroundImage: `url(${tokenTeacherInfo.photo})`}">
-          </div>
-          <div v-else style="width: 50px;height: 50px; display: block; border-radius: 50%; margin: auto; overflow: hidden; position: relative;background-repeat: no-repeat;background-size: cover;" :style="{backgroundImage: `url(${require('../../assets/img/icon/defaultAvatar/teacher_default_avator.png')})`}">
-          </div>
-          <div style="text-align: center;margin-top:.8rem">{{tokenTeacherInfo.name}}</div>
-          <div style="text-align: center;background-color: #F5A626;color: #fff;margin: .5rem auto 0;width: 5rem;border-radius: 1rem;font-size: 12px">我的星级</div>
+        <el-col :span="8" class="border-l" @touchstart.native="startPersonal" @touchmove.native="movePersonal" @touchend.native="personal">
+          <dw-avatar-reveal v-bind:avatar-url="tokenTeacherInfo.photo" style="width: 50px;height: 50px;margin: 0 auto;"></dw-avatar-reveal>
+          <div class="starName">{{tokenTeacherInfo.name}}</div>
+          <div class="star">查看星级</div>
         </el-col>
       </el-row>
     </div>
-    <!--工作台-->
-    <div class="card" style="padding: 0;margin: 10px 0;">
-      <div class="card-cell">
-        <div style="padding:0 1rem;height: 100%;line-height: 100%;color: #666666;font-size: 12px">
+    <div class="content-background">
+      <div class="card-cell border-b">
+        <div class="content-head">
           工作台
         </div>
       </div>
-      <!--@click.native='toPage(`/teacher/sendList?type=1`)'-->
-      <el-row type="flex" justify="center" align="middle" style="text-align: center" class="border-b">
-        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem;" @touchstart.native="startPress(0)" @touchend.native="endPress(0, `/teacher/sendList?type=1`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 0}">
-          <img src="../../assets/img/icon/teacherIndex/check.png" style="height: 24px">
-          <div>入园晨检</div>
-          <div>
-            <span style="font-size: 16px">
-              <i class="el-icon-circle-check color-success" v-if="todayReportCount.morningCheck.checkedCount === todayReportCount.morningCheck.studentCount"></i>
-              <i  style="font-size: 14px" class="el-icon-warning color-danger" v-else></i>
-            </span>
-            <span>
-              {{todayReportCount.morningCheck.checkedCount}}/{{todayReportCount.morningCheck.studentCount}}
-            </span>
-          </div>
-        </el-col>
-        <!--@click.native='toPage(`/teacher/sendList?type=3`)'-->
-        <el-col v-if="todayLunch !== null" :span="8" class="border-r background-touch" style="padding: 1.5rem" @touchstart.native="startPress(1)" @touchend.native="endPress(1, `/teacher/sendList?type=3`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 1}">
-          <img src="../../assets/img/icon/teacherIndex/lunch.png" style="height: 24px">
-          <div>午餐通知</div>
-          <div>
-            <span style="font-size: 16px">
-              <i class="el-icon-circle-check color-success" v-if="todayReportCount.lunch.checkedCount === todayReportCount.lunch.studentCount"></i>
-              <i style="font-size: 14px" class="el-icon-warning color-danger" v-else></i>
-            </span>
-            <span>
-              {{todayReportCount.lunch.checkedCount}}/{{todayReportCount.lunch.studentCount}}
-            </span>
-          </div>
-        </el-col>
-        <el-col v-else :span="8" class="border-r background-touch" style="padding: 1.5rem" @touchstart.native="startPress(1)" @touchend.native="endPress(1, '无')" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 1}">
-          <img src="../../assets/img/icon/teacherIndex/lunch.png" style="height: 24px">
-          <div>午餐通知</div>
-          <div>
-            <span style="font-size: 16px">
-              <i class="el-icon-circle-check color-success" v-if="todayReportCount.lunch.checkedCount === todayReportCount.lunch.studentCount"></i>
-              <i style="font-size: 14px" class="el-icon-warning color-danger" v-else></i>
-            </span>
-            <span>
-              {{todayReportCount.lunch.checkedCount}}/{{todayReportCount.lunch.studentCount}}
-            </span>
-          </div>
-        </el-col>
-        <el-col class="background-touch" :span="8" style="padding: 1.5rem" @touchstart.native="startPress(2)" @touchend.native="endPress(2, `/teacher/sendList?type=2`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 2}">
-          <img src="../../assets/img/icon/teacherIndex/sleep.png" style="height: 24px">
-          <div>午睡消息</div>
-          <div>
-            <span style="font-size: 16px">
-              <i class="el-icon-circle-check color-success" v-if="todayReportCount.nap.checkedCount === todayReportCount.nap.studentCount"></i>
-              <i style="font-size: 14px" class="el-icon-warning color-danger" v-else></i>
-            </span>
-            <span>
-              {{todayReportCount.nap.checkedCount}}/{{todayReportCount.nap.studentCount}}
-            </span>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row type="flex" justify="center" align="middle" style="text-align: center" class="border-b">
-        <el-col v-if="todayReportCount.dailyLesson.checkedCount !== todayReportCount.dailyLesson.studentCount && todayLesson !== null" :span="8" class="border-r background-touch" style="padding: 1.5rem" @touchstart.native="startPress(3)" @touchend.native="endPress(3, `/teacher/dayTeach/sendDetail?type=4`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 3}">
-          <img src="../../assets/img/icon/teacherIndex/teach.png" style="height: 24px">
-          <div>每日课程</div>
-          <div>
-            <span style="font-size: 16px">
-              <i class="el-icon-circle-check color-success" v-if="todayReportCount.dailyLesson.checkedCount === todayReportCount.dailyLesson.studentCount"></i>
-              <i style="font-size: 14px" class="el-icon-warning color-danger" v-else></i>
-            </span>
-            <span>
-              {{todayReportCount.dailyLesson.checkedCount}}/{{todayReportCount.dailyLesson.studentCount}}
-            </span>
-          </div>
-        </el-col>
-        <el-col v-if="todayReportCount.dailyLesson.checkedCount === todayReportCount.dailyLesson.studentCount && todayLesson !== null" :span="8" class="border-r background-touch" style="padding: 1.5rem"  @touchstart.native="startPress(3)" @touchend.native="endPress(3, `/teacher/dayTeach/sendDetail?type=4`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 3}">
-          <img src="../../assets/img/icon/teacherIndex/teach.png" style="height: 24px">
-          <div>每日课程</div>
-          <div>
-            <span style="font-size: 16px">
-              <i class="el-icon-circle-check color-success" v-if="todayReportCount.dailyLesson.checkedCount === todayReportCount.dailyLesson.studentCount"></i>
-              <i style="font-size: 14px" class="el-icon-warning color-danger" v-else></i>
-            </span>
-            <span>
-              {{todayReportCount.dailyLesson.checkedCount}}/{{todayReportCount.dailyLesson.studentCount}}
-            </span>
-          </div>
-        </el-col>
-        <el-col v-if="todayLesson === null" :span="8" class="border-r background-touch" style="padding: 1.5rem;" @touchstart.native="startPress(3)" @touchend.native="endPress(3, '无')" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 3}">
-          <img src="../../assets/img/icon/teacherIndex/teach.png" style="height: 24px">
-          <div>每日课程</div>
-          <div>
-            <span style="font-size: 16px">
-              <i class="el-icon-circle-check color-success" v-if="todayReportCount.dailyLesson.checkedCount === todayReportCount.dailyLesson.studentCount"></i>
-              <i style="font-size: 14px" class="el-icon-warning color-danger" v-else></i>
-            </span>
-            <span>
-              {{todayReportCount.dailyLesson.checkedCount}}/{{todayReportCount.dailyLesson.studentCount}}
-            </span>
-          </div>
-        </el-col>
-        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem" @touchstart.native="startPress(4)" @touchend.native="endPress(4, `/teacher/sendList?type=5`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 4}">
-          <img src="../../assets/img/icon/teacherIndex/summary.png" style="height: 24px">
-          <div>日总结</div>
-          <div>
-            <span style="font-size: 16px">
-              <i class="el-icon-circle-check color-success" v-if="todayReportCount.leave.checkedCount === todayReportCount.leave.studentCount"></i>
-              <i style="font-size: 14px" class="el-icon-warning color-danger" v-else></i>
-            </span>
-            <span>
-              {{todayReportCount.leave.checkedCount}}/{{todayReportCount.leave.studentCount}}
-            </span>
-          </div>
-        </el-col>
-        <el-col class="background-touch" :span="8" style="padding: 1.5rem 1.5rem 2.2rem" @touchstart.native="startPress(5)" @touchend.native="endPress(5, `/teacher/customize/select?classId=${teacherSelectedClassId}`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 5}">
-          <img src="../../assets/img/icon/teacherIndex/custom_info.png" style="height: 24px">
-          <div>自定义信息</div>
-          <div style="height: .8rem;"></div>
-        </el-col>
-      </el-row>
+      <dw-sudoku :number='3' class="server-sudoku">
+        <template v-for='(item,index) in workbench'>
+          <sudoku-content v-bind:content="item" :key='index'>
+            <dw-num-check slot="num-content" v-bind:content="item" :key='index'></dw-num-check>
+          </sudoku-content>
+        </template>
+      </dw-sudoku>
     </div>
-    <div class="card" style="padding: 0;margin: 10px 0;">
-      <div class="card-cell">
-        <div style="padding:0 1rem;height: 100%;line-height: 100%;color: #666666;font-size: 12px">
+    <div class="content-background">
+      <div class="card-cell border-b">
+        <div class="content-head">
           查询
         </div>
       </div>
-      <el-row justify="center" align="middle" style="text-align: center">
-        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem 1.5rem 2.2rem" @touchstart.native="startPress(6)" @touchend.native="endPress(6, `/teacher/history/report/list`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 6}">
-          <img src="../../assets/img/icon/teacherIndex/student.png" style="height: 24px">
-          <div>学员名单</div>
-          <div style="height: .8rem;"></div>
-        </el-col>
-        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem 1.5rem 2.2rem" @touchstart.native="startPress(7)" @touchend.native="endPress(7, `/teacher/history/list`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 7}">
-          <!--/teacher/student/list-->
-          <img src="../../assets/img/icon/teacherIndex/history.png" style="height: 24px">
-          <div>历史消息</div>
-          <div style="height: .8rem;"></div>
-        </el-col>
-        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem 1.5rem 2.2rem" @touchstart.native="startPress(8)" @touchend.native="endPress(8, `/teacher/scoreList`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 8}">
-          <img src="../../assets/img/icon/teacherIndex/score.png" style="height: 24px">
-          <div>我的评分</div>
-          <div style="height: .8rem;"></div>
-        </el-col>
-      </el-row>
+      <dw-sudoku :number='3' class="server-sudoku">
+        <template v-for='(item,index) in inquire'>
+          <sudoku-content v-bind:content="item" :key='index'></sudoku-content>
+        </template>
+      </dw-sudoku>
     </div>
-    <div class="card" style="padding: 0;margin: 10px 0 0;">
-      <div class="card-cell">
-        <div style="padding:0 1rem;height: 100%;line-height: 100%;color: #666666;font-size: 12px">
+    <div class="content-background content-background2">
+      <div class="card-cell border-b">
+        <div class="content-head">
           绩效工作台
         </div>
       </div>
-      <el-row justify="center" align="middle" style="text-align: center">
-        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem 1.5rem 2.2rem" @touchstart.native="startPress(9)" @touchend.native="endPress(9, `/teacher/renewalList`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 9}">
-          <img src="../../assets/img/icon/teacherIndex/renewalFee.svg" style="height: 24px">
-          <div>续费跟进</div>
-          <div style="height: .8rem;"></div>
-        </el-col>
-        <el-col :span="8" class="border-r background-touch" style="padding: 1.5rem 1.5rem 2.2rem" @touchstart.native="startPress(10)" @touchend.native="endPress(10, `/teacher/praise`)" @touchmove.native="movePress()" :class="{changeBackground: changeBack === 10}">
-          <img src="../../assets/img/icon/teacherIndex/evaluate.png" style="height: 24px">
-          <div>我的好评</div>
-          <div style="height: .8rem;"></div>
-        </el-col>
-      </el-row>
+      <dw-sudoku :number='3' class="server-sudoku">
+        <template v-for='(item,index) in bonus'>
+          <sudoku-content v-bind:content="item" :key='index'></sudoku-content>
+        </template>
+      </dw-sudoku>
     </div>
     <mt-popup
       :closeOnClickModal=false
@@ -202,41 +74,163 @@
   import { mapActions, mapState } from 'vuex';
   import Confirmation from '../../components/button/PopUpConfirmation';
   import moment from 'moment';
+  // 九宫格组件
+  import DwSudoku from '../../components/layout/sudoku';
+  import SudokuContent from '../../components/layout/Content';
+  import DwStoreAndClassReveal from '../../components/layout/base/StoreAndClass';
+  import DwAvatarReveal from '../../components/layout/base/AvatarShow';
 
   export default {
     data() {
       return {
-        todayReportCount: {
-          dailyLesson: {
-            checkedCount: '',
-            studentCount: '',
-          }, // 每日课程
-          leave: {
-            checkedCount: '',
-            studentCount: '',
-          }, // 离园+日总结
-          lunch: {
-            checkedCount: '',
-            studentCount: '',
-          }, // 午餐情况
-          morningCheck: {
-            checkedCount: '',
-            studentCount: '',
-          }, // 每日晨检
-          nap: {
-            checkedCount: '',
-            studentCount: '',
-          }, // 午睡情况
-        },
         classSelectPopupVisible: false,
         storeName: '',
         className: '',
         todayLesson: '',
         todayLunch: '',
-        touchPress: true,
-        changeBack: '',
         moveTouch: true,
         changeTouch: false,
+        workbench: [
+          {
+            icon: 'icon-dayCheck',
+            color: '#1db562',
+            name: '入园晨检',
+            selectIcon: true,
+            link: '/teacher/sendList?type=1',
+            checkedCount: 0,
+            studentCount: 0,
+            isJump: true,
+            examined: true,
+          },
+          {
+            icon: 'icon-lunch',
+            color: '#E7933C',
+            name: '午餐通知',
+            selectIcon: true,
+            link: '/teacher/sendList?type=3',
+            checkedCount: 0,
+            studentCount: 0,
+            isJump: true,
+            examined: true,
+          },
+          {
+            icon: 'icon-sleep',
+            color: '#419DD1',
+            name: '午睡消息',
+            selectIcon: true,
+            link: '/teacher/sendList?type=2',
+            checkedCount: 0,
+            studentCount: 0,
+            isJump: true,
+            examined: true,
+          },
+          {
+            icon: 'icon-courseInfo',
+            color: '#1db562',
+            name: '每日课程',
+            selectIcon: true,
+            link: '/teacher/dayTeach/sendDetail',
+            checkedCount: 0,
+            studentCount: 0,
+            isJump: true,
+            examined: true,
+          },
+          {
+            icon: 'icon-new-summary',
+            color: '#419DD1',
+            name: '日总结',
+            selectIcon: true,
+            link: '/teacher/sendList?type=5',
+            checkedCount: 0,
+            studentCount: 0,
+            isJump: true,
+            examined: true,
+          },
+          {
+            icon: 'icon-new-history',
+            color: '#EC6066',
+            name: '自定义报告',
+            link: '/teacher/customize/select',
+            isJump: true,
+            examined: true,
+          },
+        ],
+        inquire: [
+          {
+            icon: 'icon-student-list',
+            color: '#1db562',
+            name: '学员名单',
+            link: '/teacher/student/list',
+            isJump: true,
+            examined: true,
+          },
+          {
+            icon: 'icon-history-info',
+            color: '#20A7EE',
+            name: '历史报告',
+            link: '/teacher/history/list',
+            isJump: true,
+            examined: true,
+          },
+          {
+            icon: '',
+            color: '',
+            name: '',
+            link: '',
+            isJump: true,
+            examined: true,
+          },
+        ],
+        bonus: [
+          {
+            icon: 'icon-new-renewals',
+            color: '#f5a626',
+            name: '续费跟进',
+            link: '/teacher/renewalList',
+            isJump: true,
+            examined: true,
+          },
+          {
+            icon: 'icon-good-scores',
+            color: '#ec6066',
+            name: '我的好评',
+            link: '/teacher/praise',
+            isJump: true,
+            examined: true,
+          },
+          {
+            icon: 'icon-my-score',
+            color: '#1db562',
+            name: '家长评分',
+            link: '/teacher/scoreList',
+            isJump: true,
+            examined: true,
+          },
+          {
+            icon: 'icon-interactive',
+            color: '#EC6066',
+            name: '互动率',
+            link: '/teacher/statistical/list',
+            isJump: true,
+            examined: true,
+          },
+          {
+            icon: '',
+            color: '',
+            name: '',
+            link: '',
+            isJump: true,
+            examined: true,
+          },
+          {
+            icon: '',
+            color: '',
+            name: '',
+            link: '',
+            isJump: true,
+            examined: true,
+          },
+        ],
       };
     },
     computed: {
@@ -270,7 +264,7 @@
       ...mapActions({
         getTokenTeacherInfo: 'teacher/getTokenTeacherInfo',
         getTokenClassInfoList: 'teacher/getTokenClassInfoList',
-        getClassReadingChildList: 'teacher/getClassReadingChildList',
+        // getClassReadingChildList: 'teacher/getClassReadingChildList',
         getTodayReportCount: 'teacher/getTodayReportCount',
         getTodaySchedule: 'teacher/getTodaySchedule',
         refreshToken: 'refreshToken',
@@ -287,27 +281,6 @@
         this.changeTouch = false;
         if (this.moveTouch) {
           this.$router.push('/teacher/personal');
-        }
-      },
-      startPress(index) {
-        this.changeBack = index;
-        this.touchPress = true;
-      },
-      movePress() {
-        this.touchPress = false;
-      },
-      endPress(index, link) {
-        this.changeBack = '';
-        if (this.touchPress) {
-          if (link === '无') {
-            this.$toast('今日暂时没有安排');
-          } else if (link !== '无') {
-            if (this.todayReportCount.dailyLesson.checkedCount === this.todayReportCount.dailyLesson.studentCount && link === '/teacher/dayTeach/sendDetail?type=4') {
-              this.$toast('今日已经发送过课程');
-            } else {
-              this.$router.push(link);
-            }
-          }
         }
       },
       classSelect() {
@@ -329,18 +302,33 @@
       getSelectClassInfo() {
         // 获取已发送报告人数
         this.getTodayReportCount().then((res) => {
-          this.todayReportCount = res.obj;
+          this.workbench[0].checkedCount = res.obj.morningCheck.checkedCount;
+          this.workbench[0].studentCount = res.obj.morningCheck.studentCount;
+          this.workbench[1].checkedCount = res.obj.lunch.checkedCount;
+          this.workbench[1].studentCount = res.obj.lunch.studentCount;
+          this.workbench[2].checkedCount = res.obj.nap.checkedCount;
+          this.workbench[2].studentCount = res.obj.nap.studentCount;
+          this.workbench[3].checkedCount = res.obj.dailyLesson.checkedCount;
+          this.workbench[3].studentCount = res.obj.dailyLesson.studentCount;
+          this.workbench[4].checkedCount = res.obj.leave.checkedCount;
+          this.workbench[4].studentCount = res.obj.leave.studentCount;
+          this.workbench[3].examined = this.workbench[3].checkedCount !== this.workbench[3].studentCount;
         });
         // 获取学员名单
-        this.getClassReadingChildList();
+        // this.getClassReadingChildList();
         // 获取今日午餐和每日课程
         this.getTodaySchedule().then((res) => {
           this.todayLesson = res.obj.todayLesson;
           this.todayLunch = res.obj.todayLunch;
+          if (!this.todayLesson) {
+            this.workbench[3].isJump = false;
+          }
+          if (!this.todayLunch) {
+            this.workbench[1].isJump = false;
+          }
         });
       },
       init() {
-        // console.log(this.tokenTeacherInfo);
         this.getTokenTeacherInfo().then((resTeacher) => {
           if (resTeacher.obj) {
             // 确定是职员才请求班级列表
@@ -367,6 +355,10 @@
     },
     components: {
       Confirmation,
+      DwSudoku,
+      SudokuContent,
+      DwStoreAndClassReveal,
+      DwAvatarReveal,
     },
     created() {
       this.init();
@@ -374,7 +366,107 @@
   };
 </script>
 <style lang="less">
+  .box-head{
+    padding-top: 1rem;
+    padding-bottom: 1rem
+  }
   .changeBackground{
     background: rgba(0,0,0,0.1);
+  }
+  .server-sudoku{
+    background: #fff;
+  }
+  i.icon-classIcon{
+    font-size: 24px;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+    color: #EC6066;
+  }
+  i.icon-class{
+    font-size: 20px;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+    color: #7DCCC4;
+  }
+  .g-avatar{
+    width: 50px;
+    height: 50px;
+    display: block;
+    border-radius: 50%;
+    margin: auto;
+    overflow: hidden;
+    position: relative;
+  }
+  .g-defaultAvatar{
+    background: url(../../assets/img/img/avatar/teacher_default_avator.png) no-repeat center;
+    background-size: cover;
+  }
+  .photoAvatar{
+    width: 50px;
+    height: 50px;
+    display: block;
+    border-radius: 50%;
+    margin: auto;
+    overflow: hidden;
+    position: relative;
+    background-repeat: no-repeat;
+    background-size: cover
+  }
+  .star{
+    text-align: center;
+    background-color: #F5A626;
+    color: #fff;
+    margin: .5rem auto 0;
+    width: 5rem;
+    border-radius: 1rem;
+    font-size: 12px
+  }
+  .starName{
+    text-align: center;
+    margin-top:.8rem
+  }
+  .content-head{
+    padding:0 1rem;
+    height: 100%;
+    line-height: 100%;
+    color: #666666;
+  }
+  .content-background{
+    margin: 10px 0;
+    background: #fff
+  }
+  .content-background2{
+    margin-bottom: 0;
+  }
+
+  .square{
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 100%; /* padding百分比是相对父元素宽度计算的 */
+  }
+  .square-inner{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* 铺满父元素容器，这时候宽高就始终相等了 */
+  }
+  .square-inner>li{
+    width: calc(98% / 3);  /* calc里面的运算符两边要空格 */
+    height: calc(98% / 3);
+    margin-right: 1%;
+    margin-bottom: 1%;
+    overflow: hidden;
+  }
+  .flex{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .flex>li:nth-of-type(3n){ /* 选择个数是3的倍数的元素 */
+    margin-right: 0;
+  }
+  .flex>li:nth-of-type(n+7){  /* 选择倒数的三个元素，n可以取0 */
+    margin-bottom: 0;
   }
 </style>

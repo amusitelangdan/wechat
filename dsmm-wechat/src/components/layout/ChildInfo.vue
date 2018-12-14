@@ -5,7 +5,7 @@
         <el-col :span="9">
           <div style="border-radius: 50%; overflow: hidden; width: 48px; height: 48px; position: relative;margin-top: .3rem">
             <img v-if="photo" :src="photo" style="width: 100%; vertical-align: middle; top: 50%; position: absolute; transform: translateY(-50%)">
-            <img v-else-if="!photo" src="../../assets/img/icon/defaultAvatar/defaultAvatar.png" style="width: 100%; vertical-align: middle; top: 50%; position: absolute; transform: translateY(-50%)">
+            <img v-else-if="!photo" src="../../assets/img/img/avatar/defaultAvatar.png" style="width: 100%; vertical-align: middle; top: 50%; position: absolute; transform: translateY(-50%)">
           </div>
         </el-col>
         <el-col :span="15">

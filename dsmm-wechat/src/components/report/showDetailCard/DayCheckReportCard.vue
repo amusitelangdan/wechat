@@ -3,7 +3,8 @@
     <div  class="card-round" style="margin-top: .9rem">
       <div class="card-cell border-b layout-new">
         <div class="card-left">
-          <img src="../../../assets/img/icon/parentIndex/parent_check_logo.png" alt="">
+          <!--<img src="../../../assets/img/icon/parentIndex/parent_check_logo.png" alt="">-->
+          <i class="iconfont icon-baby_check icon-icon"></i>
         </div>
         <div style="flex: 1;">
           <div class="title" style="color: #1db562;">晨检报告</div>
@@ -17,9 +18,7 @@
           </div>
           <el-row style="color: #4d4d4d;padding-bottom: .5rem;">
             <el-col :span="11" style="margin-right: 1rem">
-              <div v-if="JSON.parse(content.items).feeling === '开心' || JSON.parse(content.items).feeling === '超开心'"><span style="display: block;float:left;">情绪:&nbsp;&nbsp;</span><img :src="require('../../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_excietment.png')" alt="" style="width: 23px;height: 22px;display: block;float:left;"></div>
-              <div v-else-if="JSON.parse(content.items).feeling === '一般' || JSON.parse(content.items).feeling === '很正常'"><span style="display: block;float:left;">情绪:&nbsp;&nbsp;</span><img :src="require('../../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_general.png')" alt="" style="width: 23px;height: 22px;display: block;float:left;"></div>
-              <div v-else-if="JSON.parse(content.items).feeling === '难过' || JSON.parse(content.items).feeling === '略低落'"><span style="display:block;float:left;">情绪:&nbsp;&nbsp;</span><img :src="require('../../../assets/img/icon/sendDetailComponents/teacher_today_popup_emotion_noHappy.png')" alt="" style="width: 23px;height: 22px;display: block;float:left;"></div>
+              情绪: <i class="iconfont" :class="feeling.icon" style="font-size: 20px" :style="{color: feeling.color}"></i>
             </el-col>
           </el-row>
         </div>
@@ -32,11 +31,13 @@
 </template>
 <script>
   import { mapState } from 'vuex';
+  import constant from '../../../config/constant';
 
   export default {
     data() {
       return {
         childId: '',
+        feeling: {},
       };
     },
     props: ['content'],
@@ -44,6 +45,21 @@
       ...mapState({
         selectedChildId: state => state.parent.selectedChildId,
       }),
+    },
+    created() {
+      constant.LEAVEMOODSTATUS.forEach((item) => {
+        let data = '';
+        if (JSON.parse(this.content.items).feeling === '开心') {
+          data = '超开心';
+        } else if (JSON.parse(this.content.items).feeling === '一般') {
+          data = '很正常';
+        } else {
+          data = '略失落';
+        }
+        if (data === item.label || JSON.parse(this.content.items).feeling === item.label) {
+          this.feeling = item;
+        }
+      });
     },
     methods: {
       jump() {
@@ -96,6 +112,7 @@
   }
   .card-left{
     width: 5rem;
+    text-align: center;
     padding: 3.5rem 1.5rem 0 0.5rem;
     img{
       width: 4rem;
@@ -112,5 +129,10 @@
       font-size: 16px;
       padding: 1.3rem 0 1.1rem;
     }
+  }
+  i.icon-icon{
+    font-size: 56px;
+    line-height: normal;
+    color: #1db562;
   }
 </style>

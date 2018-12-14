@@ -1,11 +1,11 @@
 <template>
-  <div class="border-b" style="background: #ffffff;">
+  <div class="layout-block">
     <div class="card-cell" style="padding-bottom: 0">
       <!--报告头部-->
       <div v-if="report.staff" style="display: flex;" class="new_card">
         <div style="width: 30px;height: 30px;border-radius: 50%;margin-right: 1rem;overflow: hidden">
           <img v-if="report.staff.photo" :src="report.staff.photo" alt="" style="display: block;width: 30px;margin: 0 auto;">
-          <img v-else-if="!report.staff.photo" :src="require('../../assets/img/icon/defaultAvatar/teacher_default_avator.png')" alt="" style="display: block;width: 30px;margin: 0 auto;">
+          <img v-else-if="!report.staff.photo" :src="require('../../assets/img/img/avatar/teacher_default_avator.png')" alt="" style="display: block;width: 30px;margin: 0 auto;">
         </div>
         <div style="flex: 1;">
           <div style="width: 100%;height: 20px;padding-top: .5rem">
@@ -33,7 +33,11 @@
         <div>
           <div v-if="report.photos && JSON.parse(report.photos).length !== 0" class="card" style="display: flex;flex-wrap: wrap;margin: .5rem 0">
             <el-col :span="8" v-for="(item, index) in JSON.parse(report.photos)" :key="index">
-              <div :style="{background: `url(${item}) no-repeat center`, width: '7.5rem', height: '7.5rem', margin: '.3rem auto', backgroundSize: 'cover'}" @click="preview(item)"></div>
+              <div style="width: 7.5rem;height: 7.5rem;margin: .3rem auto;"  @click="preview(item)">
+                <!--:style="{background: `url(${item}) no-repeat center`, width: '7.5rem', height: '7.5rem', margin: '.3rem auto', backgroundSize: 'cover'}"-->
+                <!--:src="item"-->
+                <img class="image-layout"  style="width: 100%;height: 100%;object-fit: cover" v-lazy="item" :key="item">
+              </div>
             </el-col>
           </div>
           <div v-if="report.video" class="card" style="display: flex;flex-wrap: wrap;margin-top: 1rem">
@@ -61,27 +65,35 @@
           <!--评论按钮-->
           <div class="card" style="overflow:hidden;">
             <div style="float: right;padding: .2rem .8rem;border: 1px #cccccc solid;border-radius: .9rem;margin-left: 1rem">
-              <img :src="require('../../assets/img/icon/parentIndex/parent_comment.png')" alt="" style="width: 1rem;height: 1rem;float: left;margin-top: .2rem;margin-right: .2rem">
-              <div style="float: left;" @click="openComment">评论</div>
+              <div  @click="openComment" style="display: flex">
+                <i class="iconfont icon-comment" style="font-size: 14px;display: block;margin-right: 2px"></i>
+                <span>评论</span>
+              </div>
             </div>
             <!--点赞按钮-->
             <div v-if="report.like === false" style="float: right;padding: .2rem .8rem;border: 1px #cccccc solid;border-radius: .9rem">
-              <img :src="require('../../assets/img/icon/parentIndex/parent_NotLike.png')" alt="" style="width: 1.1rem;height: 1rem;float: left;margin-top: .2rem;margin-right: .2rem">
-              <div style="float: left;" @click="parentLike">点赞</div>
+              <div style="float: left;display: flex" @click="parentLike">
+                <i class="iconfont icon-aixin" style="display: block;margin-right: 2px"></i>
+                <span>点赞</span>
+              </div>
             </div>
             <div v-else-if="report.like === true" style="float: right;padding: .2rem .8rem;border: 1px #cccccc solid;border-radius: .9rem">
-              <img :src="require('../../assets/img/icon/parentIndex/parent_like.png')" alt="" style="width: 1.1rem;height: 1rem;float: left;margin-top: .2rem;margin-right: .2rem">
-              <div style="float: left;color: #F5A626" @click="parentLike">已赞</div>
+              <div style="float: left;color: #F5A626;display: flex" @click="parentLike">
+                <i class="iconfont icon-praise-alt" style="color: #F5A626;display: block;margin-right: 2px"></i>
+                <span>已赞</span>
+              </div>
             </div>
           </div>
           <div class="card">
-            <div v-if="report.like || report.wechatReportCommentList ? report.wechatReportCommentList.length !== 0 : 0" style="background: #eeeeee;width: 100%;height: 1px;margin-bottom: 1rem"></div>
+            <div v-if="report.wechatReportLikeList.length !==0 || report.wechatReportCommentList.length !== 0" style="background: #eeeeee;width: 100%;height: 1px;margin-bottom: 1rem"></div>
           </div>
           <!--点赞内容显示-->
-          <div class="card" style="overflow: hidden;">
-            <img v-if="(report.wechatReportLikeList ? report.wechatReportLikeList['length']  : 0) > 0" :src="require('../../assets/img/icon/parentIndex/parent_like.png')" alt="" style="width: 1.1rem;height: 1rem;float: left;margin-top: .2rem;margin-right: .2rem">
+          <div class="card" style="overflow: hidden;padding-bottom: .5rem;margin-bottom: 0">
+            <div v-if="(report.wechatReportLikeList ? report.wechatReportLikeList['length']  : 0) > 0" style="float: left;margin-top: .2rem;margin-right: .5rem;overflow: hidden">
+              <i class="iconfont icon-praise-alt" style="color: #F5A626;display: block;margin-top: -2px"></i>
+            </div>
             <div v-for="(parent, parentList) in report.wechatReportLikeList" :key="parentList" style="float:left;">
-              <div v-if="parent.isDel === 0" style="font-weight: bolder;margin-right: 5px;">{{parent.likeUsername}}</div>
+              <div v-if="parent.isDel === 0" style="margin-right: 5px;color: #4e7cb1;">{{parent.likeUsername}}</div>
             </div>
           </div>
           <!--评论输入框-->
@@ -93,10 +105,16 @@
             </div>
           </div>
           <!--评论内容显示-->
-          <div class="card">
+          <div class="card" style="margin: 0;padding-bottom: .5rem">
             <div v-for="(index, object) in report.wechatReportCommentList" :key="object" @click="replyComment(index)">
               <div v-if="index.content.replace(/^\s+|\s+$/g,'') !== ''">
-                <span v-if="index.replyChildName !== null"><span  style="font-weight: bolder">{{index.commonUserName}}</span>回复 <span  style="font-weight: bolder">{{index.replyChildName}}{{index.replyParentRelation}}:&nbsp;&nbsp;</span></span><span v-else style="font-weight: bolder">{{index.commonUserName}}:&nbsp;&nbsp;</span>{{index.content}}
+                <span v-if="index.replyParentRelation !== null">
+                  <span  style="color: #4e7cb1;">{{index.commonUserName}}</span>
+                  回复
+                  <span  style="color: #4e7cb1;">{{index.replyChildName}}{{index.replyParentRelation}}</span>
+                </span>
+                <span v-else style="color: #4e7cb1;">{{index.commonUserName}}</span>
+                :&nbsp;&nbsp;{{index.content}}
               </div>
             </div>
           </div>
@@ -116,7 +134,6 @@
 <script>
   import { mapState, mapActions } from 'vuex';
   import { videoPlayer } from 'vue-video-player';
-  import PlayVideo from '../layout/PlayVideo';
   import DayCheckReportCard from './showDetailCard/DayCheckReportCard';
   import DaySleepReportCard from './showDetailCard/DaySleepReportCard';
   import DayLunchReportCard from './showDetailCard/DayLunchReportCard';
@@ -145,7 +162,6 @@
       'day-lunch': DayLunchReportCard,
       'day-teach': DayTeachReportCard,
       'day-summary': DaySummaryReportCard,
-      'play-video': PlayVideo,
     },
     props: ['report', 'childName', 'singleStudent'],
     computed: {
@@ -239,7 +255,6 @@
       commentReplySubmission() {
         // 请求评论
         let childId = '';
-        console.log(this.report);
         if (this.selectedChildId) {
           childId = this.selectedChildId;
         } else if (this.report.createChildId) {
@@ -335,5 +350,17 @@
       font-size: 16px;
       padding: 1.3rem 0 1.1rem;
     }
+  }
+  .image-layout[lazy=loading]{
+    height: 2rem;
+    width: 2rem;
+    margin: auto;
+    /*background: rgba(0,0,0,0.5);*/
+    background: url('../../assets/img/img/147592.gif') no-repeat center;
+    background-size: cover;
+  }
+  .layout-block{
+    background: #ffffff;
+    border: 0;
   }
 </style>

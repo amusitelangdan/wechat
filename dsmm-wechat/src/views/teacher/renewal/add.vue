@@ -1,8 +1,8 @@
 <template>
   <div>
-    <renewal-fee-child-info v-bind:renewal="renewal" v-bind:jump="false" style="margin-bottom: 10px"></renewal-fee-child-info>
+    <renewal-fee-child-info v-bind:childInfo="renewal" v-bind:isJump="false" style="margin-bottom: 10px"></renewal-fee-child-info>
     <div class="card">
-      <textarea rows="10" placeholder="可添加备注信息" v-model="memo"></textarea>
+      <textarea rows="10" placeholder="可添加备注信息" v-model="submitData.memo"></textarea>
     </div>
     <div class="button-block_primary button" @click="addPraise">提交</div>
   </div>
@@ -11,14 +11,23 @@
   import { mapState, mapActions } from 'vuex';
   import moment from 'moment';
   import RenewalFeeChildInfo from '../../../components/layout/RenewalFeeChildInfo';
+  import rule from '../../../config/validate';
+  import onValidate from '../../../utils/validate';
+
+  const { memo } = rule;
+  const ruleObj = {
+    memo,
+  };
 
   export default {
     data() {
       return {
-        id: '',
         renewal: {},
-        memo: '',
         flag: true,
+        submitData: {
+          id: '',
+          memo: '',
+        },
       };
     },
     components: {
@@ -35,13 +44,17 @@
         postFollowAdd: 'teacher/postFollowAdd',
       }),
       addPraise() {
-        if (!this.memo) {
-          this.$toast('请填写相关备注信息');
-        } else if (this.flag) {
+        const list = Object.keys(ruleObj).map(item => onValidate(this.submitData[item], ruleObj[item]))
+          .filter(item => !item.valid);
+        if (list.length > 0) {
+          this.$toast(list[0].errorMessage);
+          return;
+        }
+        if (this.flag) {
           this.flag = false;
           this.postFollowAdd({
-            orderId: this.id,
-            memo: this.memo,
+            orderId: this.submitData.id,
+            memo: this.submitData.memo,
           }).then(() => {
             this.$toast('跟进记录已提交成功');
             this.memo = '';
@@ -55,11 +68,11 @@
       },
     },
     created() {
-      this.id = this.$route.query.id;
+      this.submitData.id = this.$route.query.id;
       this.teacherFeeFollowList.forEach((item) => {
         item.exceed = Math.abs(moment().diff(item.endDate, 'days')) <= 30;
         item.exceedDate = Math.abs(moment().diff(item.endDate, 'days'));
-        if (this.id.toString() === item.id.toString()) {
+        if (this.submitData.id.toString() === item.id.toString()) {
           this.renewal = item;
         }
       });
@@ -83,11 +96,6 @@
     resize:none; // 禁止textarea拉伸
   }
   .button{
-    width: 22rem;
-    position: fixed;
-    bottom: 2rem;
-    margin: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    margin-top: 3rem;
   }
 </style>

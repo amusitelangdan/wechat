@@ -1,6 +1,6 @@
 <template>
   <div style="padding-bottom: 90px;">
-    <renewal-fee-child-info v-bind:renewal="renewal" v-bind:jump="false" style="margin-bottom: 10px"></renewal-fee-child-info>
+    <renewal-fee-child-info v-bind:childInfo="renewal" v-bind:isJump="false" style="margin-bottom: 10px"></renewal-fee-child-info>
     <div v-if="followInfo">
       <div class="card-nav" v-for="(item, index) in renewalData" :key="index">
         <div class="card-cell layout-memo">
@@ -21,7 +21,7 @@
       </div>
     </div>
     <div v-else style="overflow:hidden;">
-      <img src="../../../assets/img/icon/sendDetailComponents/kongyemian.png" alt="" style="width: 15rem;margin: 3rem auto 1rem;display: block;">
+      <img src="../../../assets/img/img/page/kongyemian.png" alt="" style="width: 15rem;margin: 3rem auto 1rem;display: block;">
       <div style="color: #999999;text-align: center">暂无续费跟进记录</div>
     </div>
     <div class="button-block_primary button" @click="addPraise">添加跟进信息</div>

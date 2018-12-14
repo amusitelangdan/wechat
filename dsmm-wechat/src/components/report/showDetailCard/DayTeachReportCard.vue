@@ -2,7 +2,7 @@
   <div  class="card-round" style="margin-top: .9rem">
     <div class="card-cell border-b layout-new">
       <div class="card-left">
-        <img src="../../../assets/img/icon/parentIndex/parent_teach_logo.png" alt="">
+        <i class="iconfont icon-baby_teach icon-icon"></i>
       </div>
       <div style="flex: 1;">
         <div class="title" style="color: #14b25d;">今日课程</div>
@@ -91,6 +91,7 @@
   }
   .card-left{
     width: 5rem;
+    text-align: center;
     padding: 3.5rem 1.5rem 0 0.5rem;
     img{
       width: 4rem;
@@ -107,5 +108,10 @@
       font-size: 16px;
       padding: 1.3rem 0 1.1rem;
     }
+  }
+  i.icon-icon{
+    font-size: 56px;
+    line-height: normal;
+    color: #1DB562;
   }
 </style>

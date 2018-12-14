@@ -29,7 +29,7 @@
         <div class="photo" v-for="(item, index) in photos" :key="index" :style="{background: `url(${item}) no-repeat center`, backgroundSize: 'cover'}"></div>
       </div>
       <div class="card-cell" v-if="review.memo">
-        <div style="color: #999999;">好评备注</div>
+        <div style="color: #999999;margin-bottom: 14px">备注</div>
         <div>
           {{review.memo}}
         </div>
@@ -71,7 +71,7 @@
           if (data.id !== null) {
             if (this.id.toString() === data.id.toString()) {
               this.review = data;
-              console.log(data);
+              // console.log(data);
               this.evaluationDate = moment(data.evaluationDate).format('YYYY年MM月DD日');
               this.photos = JSON.parse(data.photos);
             }

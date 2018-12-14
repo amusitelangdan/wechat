@@ -72,6 +72,11 @@ const store = new Vuex.Store({
       state.token = '';
       localStorage.setItem('w-token', '');
       localStorage.removeItem('phone');
+      localStorage.removeItem('w-token');
+      localStorage.removeItem('summaryDetail');
+      localStorage.removeItem('sleepDetail');
+      localStorage.removeItem('checkDetail');
+      localStorage.removeItem('phone');
       Toast('退出登录成功');
       router.go(-1);
     },
@@ -174,6 +179,11 @@ const store = new Vuex.Store({
           localStorage.setItem('w-token', state.token);
           resolve(res);
         }).catch((err) => {
+          state.token = '';
+          localStorage.removeItem('phone');
+          localStorage.setItem('w-token', '');
+          localStorage.removeItem('w-token');
+          router.go(0);
           reject(err);
         });
       });

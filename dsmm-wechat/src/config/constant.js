@@ -173,22 +173,84 @@ const LEAVEMOODSTATUS = [
   {
     label: '超开心',
     type: 0,
+    icon: 'icon-super-happy',
+    color: '#FE5454',
   },
   {
-    label: '难过',
+    label: '很正常',
     type: 1,
+    icon: 'icon-happy',
+    color: '#FFA128',
   },
   {
     label: '略低落',
     type: 2,
+    icon: 'icon-unhappy',
+    color: '#76A9FF',
+  },
+];
+const HEADANDANDMOUTH = [
+  {
+    label: '正常',
+    type: 0,
+    color: '#1db562',
   },
   {
-    label: '一般',
+    label: '有疱疹',
+    type: 1,
+    color: '#ff3300',
+  },
+];
+const LIMBINFO = [
+  {
+    label: '正常',
+    type: 0,
+    color: '#1db562',
+  },
+  {
+    label: '有擦伤',
+    type: 1,
+    color: '#ff3300',
+  },
+];
+const NAILINFO = [
+  {
+    type: 0,
+    label: '正常',
+    color: '#1db562',
+  },
+  {
+    type: 1,
+    label: '略长',
+    color: '#ff3300',
+  },
+];
+const SELECTSHIT = [
+  {
+    label: '是',
+    type: 0,
+  },
+  {
+    label: '便秘',
+    type: 1,
+  },
+  {
+    label: '拉肚子',
+    type: 2,
+  },
+  {
+    label: '否',
     type: 3,
   },
+];
+const SELECTDRINKINFO = [
   {
-    label: '很正常',
-    type: 4,
+    type: 0,
+    label: '较少',
+  },
+  {
+    type: 1,
+    label: '正常',
   },
 ];
 // 好评选项
@@ -211,5 +273,10 @@ export default {
   SLEEPMODESTATUS,
   LEAVEMOODSTATUS,
   HIGNOPINION,
+  HEADANDANDMOUTH,
+  LIMBINFO,
+  NAILINFO,
+  SELECTSHIT,
+  SELECTDRINKINFO,
 };
 

@@ -1,45 +1,49 @@
 <template>
 <div>
-  <div style="margin-bottom: 1.5rem;">
+  <div style="margin-bottom: 20px;">
     <div class="oldFont">请填写原来绑定的手机号码</div>
-    <div class="oldPhone">
-      <span>原手机号</span>
-      <input type="number" v-model="oldPhone" placeholder="填写手机号码">
-    </div>
+    <dw-around-card style="padding: 0 1rem;margin: 0">
+      <dw-setting-show slot="housing-content">
+        <div slot="left" style="width:4rem;padding-right: 1rem;">原手机号</div>
+        <div slot="center">
+          <input type="number" v-model="oldPhone" placeholder="填写手机号码" style="width: 100%">
+        </div>
+      </dw-setting-show>
+    </dw-around-card>
   </div>
   <div>
-    <div class="oldFont">请验证新的手机号码</div>
-    <div class="oldPhone border-b">
-      <span>新手机号</span>
-      <input type="number" v-model="phone" placeholder="填写手机号码">
-    </div>
-    <div style="display: flex">
-      <div class="oldPhone" style="flex: 1">
-        <div>
-          <span>验证码</span>
-          <input type="number" v-model="code" placeholder="输入验证码">
+    <div class="oldFont" style="padding-top:0; ">请验证新的手机号码</div>
+    <dw-around-card style="padding: 0 1rem;margin: 0" class="border-b">
+      <dw-setting-show slot="housing-content">
+        <div slot="left" style="width:4rem;padding-right: 1rem;">新手机号</div>
+        <div slot="center">
+          <input type="number" v-model="phone" placeholder="填写手机号码" style="width: 100%">
         </div>
-      </div>
-      <div class="border-l code" @click="getPhoneCode">{{verificationCode}}</div>
+      </dw-setting-show>
+    </dw-around-card>
+    <div style="display: flex">
+      <dw-around-card style="padding: 0 1rem;margin: 0;flex: 1;">
+        <dw-setting-show slot="housing-content">
+          <div slot="left" style="width:4rem;padding-right: 1rem;">验证码</div>
+          <div slot="center">
+            <input type="number" v-model="code" placeholder="输入验证码" style="width: 100%">
+          </div>
+        </dw-setting-show>
+      </dw-around-card>
+      <dw-around-card style="padding: 0 1rem;margin: 0;" class="border-l code" @click.native="getPhoneCode">
+        <dw-setting-show slot="housing-content">
+          <div slot="center">{{verificationCode}}</div>
+        </dw-setting-show>
+      </dw-around-card>
     </div>
   </div>
   <div class="button-block_primary button" @click="addPraise">确定</div>
-  <mt-popup
-    v-model="popupVisible" style="border-radius: 5px" popup-transition="popup-fade">
-    <div class="card" style="width: 300px;border-radius: 5px;padding: 0">
-      <div class="border-b change">
-        <span>dui</span>
-        <span>手机号修改成功</span>
-      </div>
-      <div class="surePhone" @click="closePopup">
-        确定
-      </div>
-    </div>
-  </mt-popup>
 </div>
 </template>
 <script>
   import { mapActions } from 'vuex';
+  import DwSettingShow from '../../../components/layout/base/Row';
+  import DwAroundCard from '../../../components/layout/base/Card';
 
   let clearTimer = null;
   export default {
@@ -50,8 +54,11 @@
         phone: '',
         verificationCode: '发送验证码',
         start: true,
-        popupVisible: false,
       };
+    },
+    components: {
+      DwSettingShow,
+      DwAroundCard,
     },
     destroyed() {
       if (clearTimer) {
@@ -73,7 +80,8 @@
                 verifyCode: this.code,
               }).then((res) => {
                 if (res.code.toString() === '200') {
-                  this.popupVisible = true;
+                  this.$toast('手机号修改成功');
+                  this.$router.go(-1);
                 }
               });
             } else {
@@ -91,10 +99,6 @@
         } else {
           this.$toast('请完善信息');
         }
-      },
-      closePopup() {
-        this.popupVisible = false;
-        this.$router.go(-1);
       },
       getPhoneCode() {
         if (this.phone) {
@@ -150,12 +154,12 @@
     input{
       border:0;
       padding-left: .5rem;
+      flex: 1;
     }
   }
   .code{
-    width: 100px;
     text-align: center;
-    line-height: 46px;
+    padding: 1.1rem 0;
     background: #fff;
     color: #F5A623
   }

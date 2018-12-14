@@ -49,10 +49,14 @@ const teacher = {
     todaySchedule: {},
     teacherFeeFollowList: [],
     evaluationList: [],
+    historyReportListType: '',
   },
   mutations: {
     switchTeacherSelectedClassId(state, payload) {
       state.teacherSelectedClassId = payload;
+    },
+    switchHistoryReportType(state, payload) {
+      state.historyReportListType = payload;
     },
   },
   actions: {
@@ -83,11 +87,9 @@ const teacher = {
         });
       });
     },
-    getClassReadingChildList({ state }) {
+    getClassReadingChildList({ state }, data) {
       return new Promise((resolve, reject) => {
-        api.getClassReadingChildList({
-          classId: state.teacherSelectedClassId,
-        }).then((res) => {
+        api.getClassReadingChildList(data).then((res) => {
           state.classReadingChildList = res.obj;
           resolve(res);
         }).catch((err) => {
@@ -256,6 +258,27 @@ const teacher = {
     getEvaluationAdd({ state }, data) {
       return new Promise((resolve, reject) => {
         api.getEvaluationAdd(data).then((res) => {
+          resolve(res);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    },
+    // 互动率
+    getStatisticalList({ state }, data) {
+      return new Promise((resolve, reject) => {
+        api.getStatisticalList({
+          classId: state.teacherSelectedClassId,
+        }).then((res) => {
+          resolve(res);
+        }).catch((err) => {
+          reject(err);
+        });
+      });
+    },
+    getStatisticalDetail({ state }, data) {
+      return new Promise((resolve, reject) => {
+        api.getStatisticalDetail(data).then((res) => {
           resolve(res);
         }).catch((err) => {
           reject(err);

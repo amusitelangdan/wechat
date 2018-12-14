@@ -2,26 +2,39 @@
   <div>
     <!--顶部方块-老师入口-->
     <div class="card parent" v-if="showMore">
-      <el-row style="text-align: center;">
-        <el-col :span="12" class="border-r" @click.native="jumpRouting('/service/center')">
-          <img :src="require('../assets/img/icon/parentIndex/parent_head_one.png')" alt="" style="width: 3rem;height: 3rem;padding: 1rem 0 0;">
-          <div class="loginFont" style="padding: 0rem 0 .5rem;">袋鼠服务</div>
-        </el-col>
-        <el-col :span="12" @click.native="jumpRouting(`/reserve/inputInfo?childId=${selectedChildId}`)">
-          <img :src="require('../assets/img/icon/parentIndex/parent_head_two.png')" alt="" style="width: 2.5rem;height: 3.5rem;padding: .5rem 0 0;">
-          <div class="loginFont" style="padding: 0rem 0 .5rem;">预约活动</div>
-        </el-col>
-      </el-row>
-      <el-row style="text-align: center;" class="border-t">
-        <el-col :span="12" class="border-r" @click.native="jumpRouting('/service/feedback')">
-          <img :src="require('../assets/img/icon/parentIndex/parent_head_three.png')" alt="" style="width: 3rem;height: 3rem;padding: 1rem 0 0;">
-          <div class="loginFont" style="padding: 0rem 0 .5rem;">意见反馈</div>
-        </el-col>
-        <el-col :span="12" @click.native="jumpRouting(`/service/personal?childId=${selectedChildId}`)">
-          <img :src="require('../assets/img/icon/parentIndex/parent_head_four.png')" alt="" style="width: 3rem;height: 3rem;padding: 1rem 0 0;">
-          <div class="loginFont" style="padding: 0rem 0 .5rem;">个人中心</div>
-        </el-col>
-      </el-row>
+      <div>
+        <el-row style="text-align: center;">
+          <el-col :span="12" class="border-r" @click.native="jumpRouting('/service/center')">
+            <div style="padding: .9rem 0 .3rem;margin-top: 2px;line-height: normal">
+              <i class="iconfont icon-daishufuwu"></i>
+            </div>
+            <div class="loginFont" style="padding: 0rem 0 .5rem;">袋鼠服务</div>
+          </el-col>
+          <el-col :span="12" @click.native="jumpRouting(`/reserve/inputInfo?childId=${selectedChildId}`)">
+            <div style="padding: .9rem 0 .3rem;margin-top: 2px;line-height: normal">
+              <i class="iconfont icon-reservation"></i>
+            </div>
+            <div class="loginFont" style="padding: 0 0 .5rem;">预约活动</div>
+          </el-col>
+        </el-row>
+        <el-row style="text-align: center;" class="border-t">
+          <el-col :span="12" class="border-r" @click.native="jumpRouting(`/service/feedback?childId=${selectedChildId}&className=${encodeURIComponent(selectedClassName)}`)">
+            <div style="padding: 1.2rem 0 .5rem;margin-top: 2px;line-height: normal">
+              <i class="iconfont icon-option-feedback"></i>
+            </div>
+            <div class="loginFont" style="padding: 0 0 .5rem;">意见反馈</div>
+          </el-col>
+          <el-col :span="12" @click.native="jumpRouting(`/service/personal?childId=${selectedChildId}`)" style="position: relative;">
+            <div style="position: absolute;top: .6rem;right: 1rem;width: 4rem">
+              <i class="iconfont icon-invite" style="font-size: 20px;color: #1db562;"></i>
+            </div>
+            <div style="padding: 1.5rem 0 .5rem">
+              <i class="iconfont icon-parent-personal"></i>
+            </div>
+            <div class="loginFont" style="padding: 0 0 .5rem;">个人中心</div>
+          </el-col>
+        </el-row>
+      </div>
     </div>
 
     <!--登录卡片-宝宝动态入口-->
@@ -29,7 +42,7 @@
       <div class="border-b" style="width: 100%;height: 46px;line-height: 46px;background: #ffffff;">
         <div style="float: left;padding-left: 20px;font-weight: bolder;color: #f5a627;overflow:hidden;">
           <div style="width: 20px;height: 46px;float:left;">
-            <img :src="require('../assets/img/icon/parentIndex/parent_head_dynamics.png')" alt="" style="width: 17px;height: 17px;vertical-align:middle;">
+            <img src="../assets/img/icon/parentIndex/parent_head_dynamics.png" alt="" style="width: 17px;height: 17px;vertical-align:middle;">
           </div>
           <div style="height: 46px;line-height: 48px;float:left;">
             宝宝动态
@@ -214,5 +227,21 @@
     border: 1px solid @color-primary;
     color: @color-primary;
     margin: 0 .4rem;
+  }
+  i.icon-daishufuwu{
+    font-size: 38px;
+    color: #f5a626;
+  }
+  i.icon-reservation{
+    font-size: 38px;
+    color: #ec6066;
+  }
+  i.icon-option-feedback{
+    font-size: 30px;
+    color: #488dc9;
+  }
+  i.icon-parent-personal{
+    font-size: 40px;
+    color: #1db562;
   }
 </style>

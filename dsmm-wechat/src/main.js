@@ -31,6 +31,8 @@ require('vue-video-player/src/custom-theme.css');
 import Raven from 'raven-js';
 import RavenVue from 'raven-js/plugins/vue';
 
+import './assets/font/iconfont.css';
+
 
 Vue.use(VideoPlayer);
 Vue.use(Loading);

@@ -2,54 +2,41 @@
 <div>
   <div class="card layout-background" style="overflow:hidden;">
     <div class="avatar">
-      <div v-if="teacherInfo.photo" class="defaultAvator" :style="{backgroundImage: `url(${teacherInfo.photo})`}"></div>
-      <div v-else class="defaultAvator"></div>
+      <dw-avatar-show v-bind:avatar-url="teacherInfo.photo" class="photoStyle"></dw-avatar-show>
     </div>
     <div class="teacherName">{{teacherInfo.name}}</div>
     <div class="teacher_star">
       <div v-for="(item, index) in gradeStar" :key="index">
-        <div :class="{star: item === 1}"></div>
+        <div :class="{starOption: item === 1}"></div>
       </div>
     </div>
   </div>
-  <div class="include_option">
-    <div class="card-cell option" @touchstart="changeColor(0)" @touchmove="moveValue" @touchend="changeValue(0)" :class="{changeBackground: change === 0}">
-      <div class="optionName">姓名</div>
-      <div class="optionValue">
-        <div class="icon-right"></div>
-        <div>{{teacherInfo.name}}</div>
-      </div>
-    </div>
-    <div class="card-cell option" @touchstart="changeColor(1)" @touchmove="moveValue" @touchend="changeValue(1)" :class="{changeBackground: change === 1}">
-      <div class="optionName">手机号码</div>
-      <div class="optionValue">
-        <div class="icon-right"></div>
-        <div>修改</div>
-      </div>
-    </div>
-    <div class="card-cell option" @touchstart="changeColor(2)" @touchmove="moveValue" @touchend="changeValue(2)" :class="{changeBackground: change === 2}">
-      <div class="optionName">生日</div>
-      <div class="optionValue">
-        <div class="icon-right"></div>
-        <div>{{pickerBirthday}}</div>
-      </div>
-    </div>
-  </div>
-  <div class="include_option">
-    <div class="card-cell option" @touchstart="changeColor(3)" @touchmove="moveValue" @touchend="changeValue(3)" :class="{changeBackground: change === 3}">
-      <div class="optionName">退出登录</div>
-    </div>
-  </div>
+  <dw-around-card>
+    <dw-setting-show @click.native="changeValue(0)" slot="housing-content" class="border-b">
+      <div slot="left" class="layout-row-left">姓名</div>
+      <div slot="right" class="layout-row-right">{{teacherInfo.name}}<i class="iconfont icon-angle-right"></i></div>
+    </dw-setting-show>
+    <dw-setting-show @click.native="changeValue(1)" slot="housing-content" class="border-b">
+      <div slot="left" class="layout-row-left">手机号码</div>
+      <div slot="right" class="layout-row-right">修改<i class="iconfont icon-angle-right" slot="housing-content"></i></div>
+    </dw-setting-show>
+    <dw-setting-show @click.native="changeValue(2)" slot="housing-content">
+      <div slot="left" class="layout-row-left">生日</div>
+      <div slot="right" class="layout-row-right">{{pickerBirthday}}<i class="iconfont icon-angle-right"></i></div>
+    </dw-setting-show>
+  </dw-around-card>
+  <dw-around-card>
+    <dw-setting-show @click.native="changeValue(3)" slot="housing-content">
+      <div slot="left" class="layout-row-left">退出登录</div>
+    </dw-setting-show>
+  </dw-around-card>
   <mt-popup
     v-model="popupName"
     popup-transition="popup-fade" style="border-radius: 5px;">
     <div class="changeName">
-      <div>输入姓名</div>
-      <input type="text" :placeholder="teacherInfo.name" v-model="teacherName">
-      <div class="button-group" style="padding-top: 1rem">
-        <div class="button-return_submit" style="color: #999999" @click="cancel">返回</div>
-        <div class="button-sure_submit" style="color: #fff" @click="define">确认</div>
-      </div>
+      <div>修改姓名</div>
+      <dw-input v-model="changedTeacherName" type-color="gray" type="inputText" style="margin-bottom: 20px"></dw-input>
+      <dw-select-button v-on:cancel="cancel" v-on:success="define"></dw-select-button>
     </div>
   </mt-popup>
   <mt-datetime-picker
@@ -64,6 +51,14 @@
 <script>
   import moment from 'moment';
   import { mapActions } from 'vuex';
+  import DwInputTeacherName from '../../../components/layout/base/InputGray';
+  import DwSelectButton from '../../../components/layout/base/SelectButtonLayout';
+  import DwAvatarShow from '../../../components/layout/base/AvatarShow';
+  import DwSettingShow from '../../../components/layout/base/Row';
+  import DwAroundCard from '../../../components/layout/base/Card';
+  // 新组件
+  // 组件重构
+  import DwInput from '../../../components/planning/base/input/Input';
 
   export default {
     data() {
@@ -73,19 +68,22 @@
         startDate: new Date('1970-01-01'),
         endDate: new Date('2018-01-01'),
         teacherInfo: {},
-        teacherName: '',
         gradeStar: [],
         change: '',
         moveTouch: true,
+        changedTeacherName: '',
       };
     },
     created() {
-      this.getTokenTeacherInfo().then((res) => {
-        this.teacherInfo = res.obj;
-        // 通过grade方法判断赢展示几星
-        this.grade(this.teacherInfo.level, 5);
-        this.pickerBirthday = moment(this.teacherInfo.birthday).format('YYYY-MM-DD');
-      });
+      this.init();
+    },
+    components: {
+      DwInputTeacherName,
+      DwSelectButton,
+      DwAvatarShow,
+      DwSettingShow,
+      DwAroundCard,
+      DwInput,
     },
     methods: {
       ...mapActions({
@@ -93,6 +91,19 @@
         postTeacherName: 'teacher/postTeacherName',
         getTeacherBirthday: 'teacher/getTeacherBirthday',
       }),
+      init() {
+        this.getTokenTeacherInfo().then((res) => {
+          this.teacherInfo = res.obj;
+          this.changedTeacherName = this.teacherInfo.name;
+          // 通过grade方法判断赢展示几星
+          this.grade(this.teacherInfo.level, 5);
+          if (this.teacherInfo.birthday) {
+            this.pickerBirthday = moment(this.teacherInfo.birthday).format('YYYY-MM-DD');
+          } else {
+            this.pickerBirthday = '';
+          }
+        });
+      },
       grade(index, max) {
         const a = max - index;
         const b = max - a;
@@ -119,13 +130,9 @@
             this.$router.push('/teacher/personal/phone');
           } else if (index === 2) {
             this.$refs.picker.open();
+            // this.open = true;
           } else if (index === 3) {
-            this.$toast('退出成功');
-            // localStorage.removeItem('w-token');
-            // localStorage.removeItem('summaryDetail');
-            // localStorage.removeItem('sleepDetail');
-            // localStorage.removeItem('checkDetail');
-            // localStorage.removeItem('phone');
+            this.$store.commit('logout');
           }
         }
       },
@@ -133,15 +140,18 @@
         this.popupName = false;
       },
       define() {
-        if (!this.teacherName) {
-          this.teacherName = this.teacherInfo.name;
+        if (!this.changedTeacherName) {
+          this.changedTeacherName = this.teacherInfo.name;
         }
         this.popupName = false;
-        if (this.teacherName !== this.teacherInfo.name) {
+        if (this.changedTeacherName !== this.teacherInfo.name) {
           this.postTeacherName({
-            staffName: this.teacherName,
+            staffName: this.changedTeacherName,
           }).then(() => {
-            this.$router.go(0);
+            this.teacherInfo.name = this.changedTeacherName;
+            this.gradeStar = [];
+            this.$toast('修改成功');
+            this.init();
           });
         } else {
           this.$toast('名称未修改');
@@ -154,7 +164,9 @@
           this.getTeacherBirthday({
             birthday: this.pickerBirthday,
           }).then(() => {
-            this.$router.go(0);
+            this.gradeStar = [];
+            this.$toast('修改成功');
+            this.init();
           });
         } else {
           this.$toast('生日未修改');
@@ -165,7 +177,7 @@
 </script>
 <style lang="less" scoped>
   .layout-background{
-    background: url(../../../assets/img/icon/defaultAvatar/teacher_default_background.png);
+    background: url(../../../assets/img/img/avatar/teacher_default_background.png);
     width: 100%;
     background-repeat: no-repeat;
     background-size: cover;
@@ -195,14 +207,10 @@
     margin: 2rem auto .5rem;
     position: relative;
   }
-  .defaultAvator{
+  .photoStyle{
+    width: 60px;
+    height: 60px;
     position: absolute;
-    width: 4.3rem;
-    height: 4.3rem;
-    border-radius: 100%;
-    background-image: url(../../../assets/img/icon/defaultAvatar/teacher_default_avator.png);
-    background-repeat: no-repeat;
-    background-size: cover;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -226,14 +234,14 @@
         background-size: cover;
         background-repeat: no-repeat;
       }
-      .star{
+      .starOption{
         background-image: url(../../../assets/img/icon/teacherPersonal/star.png);
       }
     }
   }
   .include_option{
     background-color: #ffffff;
-    margin-top: 1rem;
+    margin-top: 5px;
     .option{
       display: flex;
       padding-left: 1rem;
@@ -255,20 +263,11 @@
     }
   }
   .changeName{
-    padding: 1.5rem  1rem 0;
+    padding: 16px 20px 20px;
     width: 17rem;
     border-radius: 5px;
-    input{
-      height: 30px;
-      font-size: 16px;
-      padding: .5rem 4rem .5rem .5rem;
-      border-radius: 5px;
-      border: 0;
-      outline: none;
-      background: #F6F6F6;
-    }
-    div{
-      padding-bottom: .6rem;
+    div:first-of-type{
+      margin-bottom: 16px;
       color: #797979;
       font-size: 18px;
     }

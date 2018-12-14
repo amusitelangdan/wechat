@@ -4,7 +4,7 @@
       <el-col :span="8" v-if="!type">
         <div style="border-radius: 50%;  overflow: hidden; width: 56px; height: 56px; position: relative">
           <img v-if="photo" :src="photo" style="width: 100%; vertical-align: middle; top: 50%; position: absolute; transform: translateY(-50%)">
-          <img v-else src="../../assets/img/icon/defaultAvatar/teacher_default_avator.png" style="width: 100%; vertical-align: middle; top: 50%; position: absolute; transform: translateY(-50%)">
+          <img v-else src="../../assets/img/img/avatar/teacher_default_avator.png" style="width: 100%; vertical-align: middle; top: 50%; position: absolute; transform: translateY(-50%)">
         </div>
       </el-col>
       <el-col :span="16" v-if="!type">
@@ -18,8 +18,8 @@
       </el-col>
       <el-col :span="10" v-if="type">
         <div style="overflow: hidden; width: 56px; height: 56px; position: relative;">
-          <img v-if="type === '客服'" src="../../assets/img/icon/teacherList/客服.png" style="vertical-align: middle; top: 50%; left: 50%; position: absolute; transform: translateY(-50%) translateX(-50%); height: 36px">
-          <img v-if="type === '监督'" src="../../assets/img/icon/teacherList/监督.png" style="vertical-align: middle; top: 50%; left: 50%; position: absolute; transform: translateY(-50%) translateX(-50%); height: 36px">
+          <img v-if="type === '客服'" src="../../assets/img/img/page/客服.png" style="vertical-align: middle; top: 50%; left: 50%; position: absolute; transform: translateY(-50%) translateX(-50%); height: 36px">
+          <img v-if="type === '监督'" src="../../assets/img/img/page/监督.png" style="vertical-align: middle; top: 50%; left: 50%; position: absolute; transform: translateY(-50%) translateX(-50%); height: 36px">
         </div>
       </el-col>
       <el-col :span="14" v-if="type">

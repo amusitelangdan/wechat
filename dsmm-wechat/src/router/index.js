@@ -2,7 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 // 结构报表
-const StructureReport = () => import('../views/parent/structureReport.vue');
+const StructureReport = () => import('../views/parent/structureReport/structureReport.vue');
 // CSS示例页面
 const CSS = () => import('../views/css_template.vue');
 
@@ -40,7 +40,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/teacher/noStaff.vue'),
+      component: () => import('../views/teacher/welcome/noStaff.vue'),
     },
     {
       path: '/teacher/noClass',
@@ -50,7 +50,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/teacher/noClass.vue'),
+      component: () => import('../views/teacher/welcome/noClass.vue'),
     },
     {
       path: '/teacher/index',
@@ -70,7 +70,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/teacher/sendList.vue'),
+      component: () => import('../views/teacher/childrenList/sendList.vue'),
     },
     {
       path: '/teacher/student/list',
@@ -80,7 +80,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/teacher/studentList.vue'),
+      component: () => import('../views/teacher/childrenList/studentList.vue'),
     },
     {
       path: '/teacher/history/report/list',
@@ -90,17 +90,17 @@ export default new Router({
         keepAlive: true,
         share: false,
       },
-      component: () => import('../views/teacher/historyReportList.vue'),
+      component: () => import('../views/teacher/history/historyReportList.vue'),
     },
     {
       path: '/teacher/history/list',
       name: '历史报告列表',
       meta: {
         requireAuth: true,
-        keepAlive: false,
+        keepAlive: true,
         share: false,
       },
-      component: () => import('../views/teacher/historyReportInfoList.vue'),
+      component: () => import('../views/teacher/history/historyReportInfoList.vue'),
     },
     {
       path: '/teacher/dayCheck/sendDetail',
@@ -110,7 +110,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/teacher/sendCheckDetail.vue'),
+      component: () => import('../views/teacher/submitDetails/sendCheckDetail.vue'),
     },
     {
       path: '/teacher/dayLunch/sendDetail',
@@ -120,7 +120,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/teacher/sendLunchDetail.vue'),
+      component: () => import('../views/teacher/submitDetails/sendLunchDetail.vue'),
     },
     {
       path: '/teacher/daySleep/sendDetail',
@@ -129,7 +129,7 @@ export default new Router({
         requireAuth: true,
         share: false,
       },
-      component: () => import('../views/teacher/sendSleepDetail.vue'),
+      component: () => import('../views/teacher/submitDetails/sendSleepDetail.vue'),
     },
     {
       path: '/teacher/daySummary/sendDetail',
@@ -139,7 +139,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/teacher/sendSummaryDetail.vue'),
+      component: () => import('../views/teacher/submitDetails/sendSummaryDetail.vue'),
     },
     {
       path: '/teacher/dayTeach/sendDetail',
@@ -149,7 +149,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/teacher/sendTeachDetail.vue'),
+      component: () => import('../views/teacher/submitDetails/sendTeachDetail.vue'),
     },
     {
       path: '/teacher/customize/select',
@@ -159,7 +159,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/teacher/selectCustomize.vue'),
+      component: () => import('../views/teacher/submitDetails/selectCustomize.vue'),
     },
     {
       path: '/teacher/customize/sendDetail',
@@ -169,7 +169,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/teacher/sendCustomizeDetail.vue'),
+      component: () => import('../views/teacher/submitDetails/sendCustomizeDetail.vue'),
     },
     // 老师个人中心
     {
@@ -285,6 +285,27 @@ export default new Router({
       },
       component: () => import('../views/teacher/renewal/add.vue'),
     },
+    // 班级标准动作统计
+    {
+      path: '/teacher/statistical/list',
+      name: '标准动作统计列表页',
+      meta: {
+        requireAuth: true,
+        keepAlive: false,
+        share: false,
+      },
+      component: () => import('../views/teacher/lookStatistical/statisticalList.vue'),
+    },
+    {
+      path: '/teacher/statistical/detail',
+      name: '标准动作统计详情页',
+      meta: {
+        requireAuth: true,
+        keepAlive: false,
+        share: false,
+      },
+      component: () => import('../views/teacher/lookStatistical/statisticalDetail.vue'),
+    },
     // 用户调研
     {
       path: '/research/index',
@@ -325,7 +346,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/parent/welcome.vue'),
+      component: () => import('../views/parent/welcome/welcome.vue'),
     },
     {
       path: '/parent/payment',
@@ -335,7 +356,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/parent/welcomeBrowsing.vue'),
+      component: () => import('../views/parent/welcome/welcomeBrowsing.vue'),
     },
     {
       path: '/parent/acceptInvitation',
@@ -345,7 +366,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/parent/acceptInvitation'),
+      component: () => import('../views/parent/invite/acceptInvitation'),
     },
     {
       path: '/service/notice',
@@ -360,7 +381,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/parent/parents'),
+      component: () => import('../views/parent/invite/parents'),
     },
     {
       path: '/parent/invite',
@@ -370,7 +391,7 @@ export default new Router({
         keepAlive: false,
         share: true,
       },
-      component: () => import('../views/parent/invitationCode.vue'),
+      component: () => import('../views/parent/invite/invitationCode.vue'),
     },
     {
       path: '/parent/invite/success',
@@ -380,7 +401,7 @@ export default new Router({
         keepAlive: false,
         share: true,
       },
-      component: () => import('../views/parent/inviteSuccess.vue'),
+      component: () => import('../views/parent/invite/inviteSuccess.vue'),
     },
     {
       path: '/dayInfo',
@@ -390,7 +411,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/parent/reportDetail.vue'),
+      component: () => import('../views/reportPush/reportDetail.vue'),
     },
     // 服务中心
     {
@@ -515,7 +536,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/parent/trusteeshipSuccess.vue'),
+      component: () => import('../views/parent/reserve/trusteeshipSuccess.vue'),
     },
     {
       path: '/commitment/visit',
@@ -525,7 +546,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/parent/commitmentToVisit.vue'),
+      component: () => import('../views/parent/reserve/commitmentToVisit.vue'),
     },
     {
       path: '/toShop/verify',
@@ -535,7 +556,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/parent/earnestMoney.vue'),
+      component: () => import('../views/parent/reserve/earnestMoney.vue'),
     },
     // 园区地址
     {
@@ -557,7 +578,7 @@ export default new Router({
         keepAlive: false,
         share: true,
       },
-      component: () => import('../views/parent/touristBrowsing.vue'),
+      component: () => import('../views/parent/reserve/touristBrowsing.vue'),
     },
     // 绑定成功
     {
@@ -568,7 +589,7 @@ export default new Router({
         keepAlive: false,
         share: false,
       },
-      component: () => import('../views/parent/bindingSuccess.vue'),
+      component: () => import('../views/parent/invite/bindingSuccess.vue'),
     },
     // 袋鼠服务中心分享
     {
@@ -586,15 +607,6 @@ export default new Router({
       path: '/css_template',
       name: 'CSS',
       component: CSS,
-    },
-    {
-      path: '/img',
-      name: '页面展示',
-      meta: {
-        requireAuth: false,
-        keepAlive: false,
-      },
-      component: () => import('../views/parent/shareShow.vue'),
     },
   ],
 });
